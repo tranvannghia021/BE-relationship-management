@@ -111,5 +111,9 @@ return [
     */
 
     'password_timeout' => 10800,
-
+    'key'=>[
+       'jwt'=> env('KEY_JWT'),
+        'alg'=>'HS256',
+        'expire'=>60*2 // second
+    ]
 ];
