@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('relationship_id')->references('id')->on('relationships');
             $table->string('name');
             $table->text('address');
+            $table->date('time');
             $table->jsonb('notes')->nullable();
             $table->timestamps();
         });

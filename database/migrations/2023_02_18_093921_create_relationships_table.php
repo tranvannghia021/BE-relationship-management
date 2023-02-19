@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('relationship_id')->default(0);
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
-            $table->string('fullName');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->text('avatar')->nullable();
             $table->date('birthday');
             $table->bigInteger('phone')->nullable();
