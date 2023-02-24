@@ -14,7 +14,10 @@ return [
     | Supported: "pusher", "ably", "redis", "log", "null"
     |
     */
-
+    'options' => [
+        'cluster' => 'ap1',
+        'useTLS' => true
+    ],
     'default' => env('BROADCAST_DRIVER', 'null'),
 
     /*
