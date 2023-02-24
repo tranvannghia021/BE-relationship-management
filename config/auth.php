@@ -115,5 +115,38 @@ return [
        'jwt'=> env('KEY_JWT'),
         'alg'=>'HS256',
         'expire'=>60*2 // second
+    ],
+    'social'=>[
+        'key'=> env('KEY_SOCIAL_AUTH'),
+        'expire'=>5,
+        'facebook'=>[
+            'client_id'=>env('FACEBOOK_CLIENT_ID'),
+            'redirect_uri'=>env('FACEBOOK_REDIRECT_URI'),
+            'client_secret'=>env('FACEBOOK_CLIENT_SECRET'),
+            'base_api'=>env('FACEBOOK_BASE_API'),
+            'version'=>env('FACEBOOK_VERSION'),
+            'scope'=>[
+                'public_profile',
+                'email'
+            ]
+        ],
+        'google'=>[
+            'client_id'=>env('GOOGLE_CLIENT_ID'),
+            'redirect_uri'=>env('GOOGLE_REDIRECT_URI'),
+            'client_secret'=>env('GOOGLE_CLIENT_SECRET'),
+            'base_api'=>env('GOOGLE_BASE_API'),
+            'version'=>env('GOOGLE_VERSION'),
+            'scope'=>[
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/user.addresses.read',
+                'https://www.googleapis.com/auth/user.birthday.read',
+                'https://www.googleapis.com/auth/user.emails.read',
+                'https://www.googleapis.com/auth/user.gender.read',
+                'https://www.googleapis.com/auth/user.organization.read',
+                'https://www.googleapis.com/auth/user.phonenumbers.read',
+                'https://www.googleapis.com/auth/userinfo.profile'
+            ]
+        ],
+
     ]
 ];
