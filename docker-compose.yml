@@ -25,14 +25,19 @@ services:
       - .env
     environment:
       - DB_HOST=db
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=tvnaapp
+      # - CACHE_DRIVER=redis
     volumes:
       - ./:/var/www/html
     depends_on:
       - db
+      - redis
     networks:
       - app-network
     links:
       - db
+      - redis
 
   db:
     image: mysql:8.0
@@ -42,11 +47,22 @@ services:
       - .env
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
     ports:
       - 3306:3306
     volumes:
       - ./docker-compose/mysql:/var/lib/mysql
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    container_name: be-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: tvnaapp
+    ports:
+      - 6379:6379
     networks:
       - app-network
 
