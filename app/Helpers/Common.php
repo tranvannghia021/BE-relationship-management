@@ -27,6 +27,15 @@ class Common{
         return json_decode(json_encode(JWT::decode($jwt, new Key(config('auth.key.jwt'),config('auth.key.alg')))),true);
     }
 
+    public static function encodeSocialAuth(array $payload) :string{
+        $payload['expire']=date("Y-m-d H:i:s",time() + config('auth.social.expire'));
+        return JWT::encode($payload, config('auth.social.key'),config('auth.key.alg'));
+    }
+
+    public static function decodeSocialAuth(string $jwt){
+        return json_decode(json_encode(JWT::decode($jwt, new Key(config('auth.social.key'),config('auth.key.alg')))),true);
+    }
+
     public static function expireToken(string $time) :bool{
         return date("Y-m-d H:i:s",time()) > $time;
     }
