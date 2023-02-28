@@ -114,11 +114,11 @@ return [
     'key'=>[
        'jwt'=> env('KEY_JWT'),
         'alg'=>'HS256',
-        'expire'=>60*2 // second
+        'expire'=>60*2*60 // second
     ],
     'social'=>[
         'key'=> env('KEY_SOCIAL_AUTH'),
-        'expire'=>5,
+        'expire'=>60*5,
         'facebook'=>[
             'client_id'=>env('FACEBOOK_CLIENT_ID'),
             'redirect_uri'=>env('FACEBOOK_REDIRECT_URI'),

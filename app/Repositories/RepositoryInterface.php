@@ -39,4 +39,7 @@ interface RepositoryInterface
      * @return bool
      */
     public function delete($id):bool;
+
+
+    public function updateOrInsert(array $conditions,array $attributes):array|object;
 }
