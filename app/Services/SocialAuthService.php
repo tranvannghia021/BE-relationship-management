@@ -51,6 +51,6 @@ class SocialAuthService{
                 default:
                     return $this->ApiResponseError('Connect access denied');
             }
-//            return Redirect::to(config('common.url.font_end'));
+            return Redirect::to(config('common.url.font_end'));
         }
 }
