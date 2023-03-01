@@ -147,6 +147,18 @@ return [
                 'https://www.googleapis.com/auth/userinfo.profile'
             ]
         ],
+        'github'=>[
+            'app_id'=>env('GITHUB_APP_ID'),
+            'host'=>env('GITHUB_HOST'),
+            'client_id'=>env('GITHUB_CLIENT_ID'),
+            'redirect_uri'=>env('GITHUB_REDIRECT_URI'),
+            'client_secret'=>env('GITHUB_CLIENT_SECRET'),
+            'base_api'=>env('GITHUB_BASE_API'),
+            'version'=>env('GITHUB_VERSION'),
+            'scope'=>[
+                'user'
+            ]
+        ],
 
     ]
 ];

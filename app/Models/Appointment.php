@@ -22,6 +22,9 @@ class Appointment extends Model
         'time'=>'datetime'
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function relationships():BelongsTo{
         return $this->belongsTo(Relationship::class,'relationship_id');
     }

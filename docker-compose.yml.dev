@@ -13,7 +13,7 @@ services:
       - app
     networks:
       - app-network
-
+    
   app:
     build:
       context: ./
@@ -58,26 +58,13 @@ services:
   redis:
     image: redis:latest
     container_name: be-redis
-    restart: always
-    command: redis-server --save 20 1 --loglevel warning --requirepass tvnaapp
-#    environment:
-#      REDIS_PASSWORD: tvnaapp
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: tvnaapp
     ports:
       - 6379:6379
     networks:
       - app-network
-  supervisor:
-    build:
-        context: ./
-        dockerfile: ./supervisor/Dockerfile
-    container_name: supervisor
-    ports:
-        - 22
-        - 80
-    volumes:
-        - ./:/var/www/html
-    networks:
-        - app-network
 
 networks:
   app-network:

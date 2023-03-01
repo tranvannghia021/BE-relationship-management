@@ -53,6 +53,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function relationships(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Relationship::class,'relationship_id');

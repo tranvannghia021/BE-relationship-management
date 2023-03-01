@@ -32,12 +32,23 @@ class Relationship extends Model
         'last_meeting'=>'datetime'
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function users() :BelongsTo{
         return $this->belongsTo(User::class,'user_id');
     }
+
+    /**
+     * @return BelongsTo
+     */
     public function categories() :BelongsTo{
         return $this->belongsTo(Relationship::class,'category_id');
     }
+
+    /**
+     * @return HasMany
+     */
     public function appointment():HasMany{
         return $this->hasMany(Appointment::class);
     }

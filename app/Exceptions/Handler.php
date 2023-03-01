@@ -46,6 +46,12 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     * @param $request
+     * @param Throwable $e
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response|null
+     */
     public function render($request, Throwable $e)
     {
 

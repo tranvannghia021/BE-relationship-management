@@ -18,9 +18,19 @@ class SocialAuthController extends Controller
 
     }
 
+    /**
+     * @param GenerateUrlRequest $request
+     * @param $platform
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function generateUrl(GenerateUrlRequest $request, $platform){
         return $this->socialAuthService->generateUrl($request,$platform);
     }
+
+    /**
+     * @param Request $request
+     * @return array|bool[]|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function auth(Request $request){
       return $this->socialAuthService->auth($request->all());
     }

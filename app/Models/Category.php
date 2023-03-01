@@ -15,6 +15,9 @@ class Category extends Model
         'name'
     ];
 
+    /**
+     * @return HasMany
+     */
     public function relationships():HasMany{
         return $this->hasMany(Relationship::class);
     }
