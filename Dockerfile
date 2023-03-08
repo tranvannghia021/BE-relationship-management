@@ -1,9 +1,9 @@
-FROM php:8.1.16-fpm-alpine
+FROM php:7.3-fpm-alpine
 
 WORKDIR /var/www/html
 RUN addgroup -g 1000 -S appuser && adduser -u 1000 -S appuser -G appuser
 
-RUN apk add --no-cache \
+RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
 	git \
 	curl \
 	libmcrypt-dev \
@@ -11,11 +11,14 @@ RUN apk add --no-cache \
 	libpng-dev \
 	libjpeg-turbo-dev \
 	freetype-dev \
-	tzdata
+	tzdata \
+    postgresql-dev
 
-RUN docker-php-ext-install pdo_mysql zip gd
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN echo "extension=mongodb.so" >> /usr/local/etc/php/php.ini
+RUN docker-php-ext-install pdo pdo_pgsql
+
 COPY . .
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-interaction --no-scripts
 RUN composer install --prefer-dist --no-interaction --no-scripts

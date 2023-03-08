@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Appointment extends Model
 {
     use HasFactory;
-    protected $connection='mysql';
+    protected $connection='pgsql';
     protected $table='appointment';
     protected $fillable=[
         'relationship_id',
@@ -22,10 +22,7 @@ class Appointment extends Model
         'time'=>'datetime'
     ];
 
-    /**
-     * @return BelongsTo
-     */
-    public function relationships():BelongsTo{
-        return $this->belongsTo(Relationship::class,'relationship_id');
-    }
+
+
+
 }
