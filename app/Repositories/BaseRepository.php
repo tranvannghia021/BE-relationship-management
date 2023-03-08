@@ -87,4 +87,15 @@ class BaseRepository implements RepositoryInterface
         }
         return true;
     }
+
+    /**
+     * updateOrInsert
+     *
+     * @param $conditions
+     * @param array $attributes
+     * @return object|array
+     */
+    public function updateOrInsert($conditions,array $attributes):object|array{
+        return $this->model->updateOrInsert($conditions,$attributes)->first();
+    }
 }

@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('appointment', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('relationship_id');
-            $table->foreign('relationship_id')->references('id')->on('relationships');
-            $table->string('name');
-            $table->text('address');
-            $table->date('time');
+            $table->integer('relationship_id');
+            $table->integer('user_id');
+//            $table->foreign('relationship_id')->references('id')->on('relationships');
+            $table->string('name')->nullable();
+            $table->text('address')->nullable();
+            $table->date('time')->default(date("Y-m-d H:i:s"));
             $table->jsonb('notes')->nullable();
             $table->timestamps();
         });

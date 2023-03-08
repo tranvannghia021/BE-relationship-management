@@ -30,6 +30,9 @@ class GenerateUrlRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function messages()
     {
         return [
@@ -38,6 +41,11 @@ class GenerateUrlRequest extends FormRequest
         ];
 
     }
+
+    /**
+     * @param Validator $validator
+     * @return void
+     */
     protected function failedValidation(Validator $validator)
     {
 

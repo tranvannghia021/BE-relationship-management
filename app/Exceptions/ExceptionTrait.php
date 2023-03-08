@@ -12,6 +12,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait ExceptionTrait
 {
+    /**
+     * @param $request
+     * @param $e
+     * @return \Illuminate\Http\JsonResponse|void
+     */
     public function apiException($request,$e){
 
 
@@ -34,31 +39,46 @@ trait ExceptionTrait
         }
     }
 
-
+    /**
+     * @param $e
+     * @return bool
+     */
     public function isModel($e){
 
         return $e instanceof ModelNotFoundException;
     }
 
-
+    /**
+     * @param $e
+     * @return bool
+     */
     public function isHttp($e){
 
         return $e instanceof NotFoundHttpException;
     }
 
-
+    /**
+     * @param $e
+     * @return bool
+     */
     public function isToken($e){
 
         return $e instanceof AuthenticationException;
     }
 
+    /**
+     * @param $e
+     * @return bool
+     */
     public function isMethod($e){
 
         return $e instanceof MethodNotAllowedHttpException;
     }
 
 
-
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function modelResponse(){
 
         return response()->json([
@@ -67,7 +87,9 @@ trait ExceptionTrait
         ],Response::HTTP_NOT_FOUND);
     }
 
-
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function httpResponse(){
 
         return response()->json([
@@ -76,7 +98,9 @@ trait ExceptionTrait
         ],Response::HTTP_NOT_FOUND);
     }
 
-
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function tokenResponse(){
 
         return response()->json([
@@ -85,7 +109,9 @@ trait ExceptionTrait
         ],Response::HTTP_UNAUTHORIZED);
     }
 
-
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function methodResponse(){
 
         return response()->json([

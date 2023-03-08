@@ -114,11 +114,11 @@ return [
     'key'=>[
        'jwt'=> env('KEY_JWT'),
         'alg'=>'HS256',
-        'expire'=>60*2 // second
+        'expire'=>60*2*60 // second
     ],
     'social'=>[
         'key'=> env('KEY_SOCIAL_AUTH'),
-        'expire'=>5,
+        'expire'=>60*5,
         'facebook'=>[
             'client_id'=>env('FACEBOOK_CLIENT_ID'),
             'redirect_uri'=>env('FACEBOOK_REDIRECT_URI'),
@@ -145,6 +145,18 @@ return [
                 'https://www.googleapis.com/auth/user.organization.read',
                 'https://www.googleapis.com/auth/user.phonenumbers.read',
                 'https://www.googleapis.com/auth/userinfo.profile'
+            ]
+        ],
+        'github'=>[
+            'app_id'=>env('GITHUB_APP_ID'),
+            'host'=>env('GITHUB_HOST'),
+            'client_id'=>env('GITHUB_CLIENT_ID'),
+            'redirect_uri'=>env('GITHUB_REDIRECT_URI'),
+            'client_secret'=>env('GITHUB_CLIENT_SECRET'),
+            'base_api'=>env('GITHUB_BASE_API'),
+            'version'=>env('GITHUB_VERSION'),
+            'scope'=>[
+                'user'
             ]
         ],
 

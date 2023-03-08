@@ -9,13 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     use HasFactory;
-    protected $connection='mysql';
+    protected $connection='pgsql';
     protected $table='categories';
     protected $fillable=[
         'name'
     ];
 
-    public function relationships():HasMany{
-        return $this->hasMany(Relationship::class);
-    }
 }

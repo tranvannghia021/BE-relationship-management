@@ -1,5 +1,5 @@
 <?php
-namespace App\Ecommerce\Facebook;
+namespace App\Ecommerce\Github;
 use App\Ecommerce\BaseApi;
 use App\Helpers\Common;
 use App\Helpers\PusherHelper;
@@ -7,12 +7,13 @@ use App\Helpers\UserHelper;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 
-class Facebook extends BaseApi{
-    protected $_baseApi,$_version;
+class Github extends BaseApi {
+    protected $_baseApi,$_version,$_host;
     public function __construct()
     {
-        $this->_baseApi=config('auth.social.facebook.base_api');
-        $this->_version=config('auth.social.facebook.version');
+        $this->_baseApi=config('auth.social.github.base_api');
+        $this->_version=config('auth.social.github.version');
+        $this->_host=config('auth.social.github.host');
         parent::__construct();
     }
 
@@ -22,16 +23,14 @@ class Facebook extends BaseApi{
      * @return string
      */
     public function generateUrl(array $payload=[],$type='auth'){
-       return "https://www.facebook.com/v15.0/dialog/oauth?".http_build_query(
-               [
-                   "client_id"=>config('auth.social.facebook.client_id'),
-                   'redirect_uri'=>config('auth.social.facebook.redirect_uri'),
-                   'response_type'=>'code',
-                   'display'=>'popup',
-                   'scope'=>self::implodeScope(),
-                   'state'=>self::encodeState($payload,$type)
-               ]
-           );
+        return "$this->_host/login/oauth/authorize?".http_build_query(
+                [
+                    "client_id"=>config('auth.social.github.client_id'),
+                    'redirect_uri'=>config('auth.social.github.redirect_uri'),
+                    'scope'=>self::implodeScope(),
+                    'state'=>self::encodeState($payload,$type)
+                ]
+            );
 
     }
 
@@ -39,7 +38,7 @@ class Facebook extends BaseApi{
      * @return string
      */
     private function implodeScope(){
-        return implode(',',config('auth.social.facebook.scope'));
+        return implode(' ',config('auth.social.github.scope'));
     }
 
     /**
@@ -60,7 +59,7 @@ class Facebook extends BaseApi{
         return Common::decodeSocialAuth($state);
     }
 
-    /***
+    /**
      * @param array $request
      * @return void
      */
@@ -70,30 +69,35 @@ class Facebook extends BaseApi{
         if(!$token['status']){
             PusherHelper::pusher($request['state']['uuid'],[
                 'status'=>false,
-                'message'=>'Access denied!'
+                'error'=>[
+                    'type'=>'account_access_denied',
+                    'message'=>'Access denied!',
+                    'platform'=>'github'
+                ]
             ]);
             return;
         }
         if($request['state']['type'] == 'auth'){
             $user=self::getProfile($token['data']['access_token']);
-           if(!$user['status']){
-               PusherHelper::pusher($request['state']['uuid'],[
-                   'status'=>false,
-                   'error'=>[
-                       'type'=>'account_access_denied',
-                       'message'=>'Access denied!',
-                   ]
-               ]);
-               return;
-           }
+            if(!$user['status']){
+                PusherHelper::pusher($request['state']['uuid'],[
+                    'status'=>false,
+                    'error'=>[
+                        'type'=>'account_access_denied',
+                        'message'=>'Access denied!',
+                        'platform'=>'github'
+                    ]
+                ]);
+                return;
+            }
             $payload=[
                 'internal_id'=>$user['data']['id'],
-                'first_name'=>$user['data']['first_name'],
-                'last_name'=>$user['data']['last_name'],
-                'email'=>$user['data']['email'],
-//                'email_verified_at'=>now(),
-                'platform'=>'facebook',
-                'avatar'=>@$user['data']['picture']['data']['url'],
+                'first_name'=>$user['data']['name'],
+                'last_name'=>@$user['data']['last_name'] ?? '',
+                'avatar'=>$user['data']['avatar_url'],
+                'email'=>@$user['data']['email']??$user['data']['login'].'@gmail.com',
+                'email_verified_at'=>now(),
+                'platform'=>'github',
                 'password'=>Hash::make(123456789),
                 'status'=>true,
             ];
@@ -113,8 +117,8 @@ class Facebook extends BaseApi{
                 'email'=>$payload['email'],
                 'platform'=>$payload['platform'],
             ],$payload);
-            $payload['id']=$result['id'];
             unset($payload['password']);
+            $payload['id']=$result['id'];
             $pusher=[
                 'userInfo'=>$payload,
                 'token'=>[
@@ -136,13 +140,17 @@ class Facebook extends BaseApi{
      * @return array
      */
     public function getToken(string $code){
-        $url="$this->_baseApi/$this->_version/oauth/access_token?".http_build_query([
-            'client_id'=>config('auth.social.facebook.client_id'),
-                'redirect_uri'=>config('auth.social.facebook.redirect_uri'),
-                'client_secret'=>config('auth.social.facebook.client_secret'),
+
+        $url="$this->_host/login/oauth/access_token?".http_build_query([
+                'client_id'=>config('auth.social.github.client_id'),
+                'redirect_uri'=>config('auth.social.github.redirect_uri'),
+                'client_secret'=>config('auth.social.github.client_secret'),
                 'code'=>$code,
             ]);
-        return $this->getRequest($url);
+        $header=[
+            'Accept'=>'application/json'
+        ];
+        return $this->postRequest($url,$header,);
     }
 
     /**
@@ -150,23 +158,10 @@ class Facebook extends BaseApi{
      * @return array
      */
     private function getProfile(string $token){
-        $url="$this->_baseApi/$this->_version/me?".http_build_query([
-            'access_token'=>$token,
-             'fields'=>implode(',',[
-                 'id',
-                'name',
-                'first_name',
-                'last_name',
-                'email',
-                'birthday',
-                'gender',
-                'hometown',
-                'location',
-                'picture'
-             ])
-            ]);
-        return $this->getRequest($url);
+        $url="https://$this->_baseApi/user";
+        $header=[
+            'Authorization'=>'Bearer '.$token
+        ];
+        return $this->getRequest($url,$header);
     }
-
-
 }

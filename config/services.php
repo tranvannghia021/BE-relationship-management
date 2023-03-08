@@ -31,6 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'pusher'    => [
+        'channel'=>'TVNA',
+        'event'=>'people_',
         'key'     => env('PUSHER_APP_KEY'),
         'secret'  => env('PUSHER_APP_SECRET'),
         'app_id'  => env('PUSHER_APP_ID'),

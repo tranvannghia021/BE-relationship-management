@@ -14,5 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-return ',';
+return '...';
+});
+Route::get('/php', function () {
+   phpinfo();
 });
