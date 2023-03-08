@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    protected $connection='mysql';
+    protected $connection='pgsql';
     protected $table='users';
     /**
      * The attributes that are mass assignable.
@@ -53,11 +53,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function relationships(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Relationship::class,'relationship_id');
-    }
 }
