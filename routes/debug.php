@@ -14,3 +14,6 @@ Route::group(['prefix'=>''],function (){
         ];
     });
 });
+Route::get('php', function () {
+    phpinfo();
+});
