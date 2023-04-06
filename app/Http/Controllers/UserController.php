@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Account\RegisterRequest;
+use App\Http\Requests\Account\ReSendLinkRequest;
 use App\Services\UserService;
 use App\Traits\Response;
 use Illuminate\Http\Request;
@@ -47,5 +48,13 @@ class UserController extends Controller
 
        }
            return $this->userService->forgotPassword($request);
+    }
+
+    public function deleteUser(Request $request){
+        return $this->userService->deleteUser($request);
+    }
+
+    public function reSendLinkVerifyEmail(ReSendLinkRequest $request){
+        return $this->userService->reSendLinkVerifyEmail($request);
     }
 }
