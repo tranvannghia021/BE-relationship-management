@@ -35,14 +35,7 @@ class User extends Authenticatable
         'status'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-    ];
+
 
     /**
      * The attributes that should be cast.

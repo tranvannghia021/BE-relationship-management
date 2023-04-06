@@ -4,8 +4,13 @@ use Illuminate\Support\Facades\Schema;
 use Jenssegers\Mongodb\Schema\Blueprint;
 
 class MongoBaseRepository{
-    public function createCollection(string $name){
-        Schema::connection('mongodb')->table($name, static function (Blueprint $table)  {
+    private $prefix='relationships_';
+    public function __construct()
+    {
+    }
+
+    public function createCollection(int $id){
+        Schema::connection('mongodb')->table($this->prefix.$id, static function (Blueprint $table)  {
             $table->index('user_id');
             $table->index('relationship_id');
             $table->index('category_id');
@@ -21,5 +26,8 @@ class MongoBaseRepository{
             $table->index('notes');
         });
 
+    }
+    public function collectionExist(int $id){
+        return Schema::connection('mongodb')->hasTable($this->prefix.$id);
     }
 }
