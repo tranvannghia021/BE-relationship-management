@@ -20,7 +20,7 @@ class VerifyService{
     public function VerifyForgotPassword($request){
         $account=$this->userRepo->find($request['userInfo']['id']);
         unset($account['password']);
-        Common::pushSocket(config('services.pusher.channel'),config('services.pusher.event').$account['id'],[
+        Common::pushSocket(config('services.pusher.channel'),config('services.pusher.event').$account['email'],[
             "status"=>true,
             'data'=>$account
         ]);
