@@ -56,7 +56,7 @@ class UserRepository extends BaseRepository {
      * @param $attributes
      * @return array|object
      */
-    public function updateOrInsert($conditions,$attributes):array|object {
+    public function updateOrInsert($conditions,$attributes){
         $users=$this->findBy($conditions,['id']);
         if(empty($users)){
             $result=$this->create($attributes);

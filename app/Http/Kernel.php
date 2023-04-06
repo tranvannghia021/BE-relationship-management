@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AuthJwtRefreshTokenMiddeware;
 use App\Http\Middleware\DebugMiddleware;
 use App\Http\Middleware\VerifyLinkService;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -68,6 +69,7 @@ class Kernel extends HttpKernel
         'debug'=>   DebugMiddleware::class,
         'auth.jwt'=>    \App\Http\Middleware\AuthJwt::class,
         'auth.social'=> \App\Http\Middleware\SocialAuth::class,
-        'auth.verify'=> VerifyLinkService::class
+        'auth.verify'=> VerifyLinkService::class,
+        'authJwt.refresh_token'=>AuthJwtRefreshTokenMiddeware::class
     ];
 }

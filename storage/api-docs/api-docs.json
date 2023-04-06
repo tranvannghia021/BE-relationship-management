@@ -1,0 +1,64 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Your Application API document",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/{platform}/generate-url": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Generate url",
+                "description": "Generate link social auth",
+                "operationId": "generateUrl",
+                "requestBody": {
+                    "description": "Uuid session",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "uuid"
+                                ],
+                                "properties": {
+                                    "uuid": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "aadajdhs37487tfdf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "link social auth",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "format": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "format": "string",
+                                            "example": "link social auth"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

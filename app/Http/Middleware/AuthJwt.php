@@ -20,6 +20,12 @@ class AuthJwt
     public function handle(Request $request, Closure $next): Response
     {
         $token=$request->header('Authorization');
+        if(empty($token)){
+            return \response()->json([
+                'status'=>false,
+                'message'=>'Token is required'
+            ],401);
+        }
         try {
             $payload=Common::decodeJWT($token);
             $isExpire=Common::expireToken($payload['expire']);
@@ -29,15 +35,16 @@ class AuthJwt
                     'message'=>'Token is expire'
                 ],401);
             }
-            $userId=app(UserRepository::class)->find($payload['id']);
-            if(empty($userId)){
+            $user=app(UserRepository::class)->find($payload['id']);
+            if(empty($user)){
                 return \response()->json([
                     'status'=>false,
                     'message'=>'User not found'
                 ],401);
             }
-            $request['userInfo']=$userId;
-        }catch (Exception $exception){
+            unset($user['password']);
+            $request['userInfo']=$user;
+        }catch (\Exception $exception){
             return \response()->json([
                 'status'=>false,
                 'message'=>'Token is invalid'

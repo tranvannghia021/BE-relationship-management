@@ -1,5 +1,6 @@
 <?php
 namespace App\Services;
+use App\Helpers\Common;
 use App\Repositories\UserRepository;
 
 class VerifyService{
@@ -14,5 +15,14 @@ class VerifyService{
             'email_verified_at'=>now()
         ]);
         return view('verify-done');
+    }
+
+    public function VerifyForgotPassword($request){
+        $account=$this->userRepo->find($request['userInfo']['id']);
+        unset($account['password']);
+        Common::pushSocket(config('services.pusher.channel'),config('services.pusher.event').$account['id'],[
+            "status"=>true,
+            'data'=>$account
+        ]);
     }
 }

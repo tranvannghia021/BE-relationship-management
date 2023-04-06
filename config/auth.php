@@ -109,12 +109,15 @@ return [
     'password_timeout' => 10800,
     'key'=>[
         'jwt'=> env('KEY_JWT'),
+        'jwt_private'=> env('KEY_JWT_PRIVATE'),
         'alg'=>'HS256',
-        'expire'=>60*2*60 // second
+        'expire'=>60*60*60, // second
+        'expire_refresh_token'=>60*60*60*60,
     ],
+    'platform_app'=>'app',
     'social'=>[
         'key'=> env('KEY_SOCIAL_AUTH'),
-        'expire'=>60*5,
+        'expire'=>60*60*60,
         'facebook'=>[
             'client_id'=>env('FACEBOOK_CLIENT_ID'),
             'redirect_uri'=>env('FACEBOOK_REDIRECT_URI'),

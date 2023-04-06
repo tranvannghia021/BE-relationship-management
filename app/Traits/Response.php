@@ -12,6 +12,7 @@ trait Response{
             'status'=>true,
             'message'=>$message,
             'data'=>$data,
+            'errors'=>null
         ],$code);
     }
 
@@ -20,11 +21,12 @@ trait Response{
      * @param $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ApiResponseError($error,$code=400){
+    public function ApiResponseError($error=null,$code=400){
         return response()->json([
             'status'=>false,
-            'error'=>$error,
-            'message'=>'Error,Try again'
+            'errors'=>$error,
+            'data'=>null,
+            'message'=>'Some thing went wrong,Please Try again'
         ],$code);
     }
 }

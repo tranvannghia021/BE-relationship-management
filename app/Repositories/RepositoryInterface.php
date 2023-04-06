@@ -9,21 +9,21 @@ interface RepositoryInterface
      * Get all
      * @return array|object
      */
-    public function getAll():array|object;
+    public function getAll();
 
     /**
      * Get one
      * @param $id
      * @return array|object
      */
-    public function find($id):array|object;
+    public function find($id);
 
     /**
      * Create
      * @param array $attributes
      * @return array|object
      */
-    public function create(array $attributes):array|object;
+    public function create(array $attributes);
 
     /**
      * Update
@@ -31,14 +31,14 @@ interface RepositoryInterface
      * @param array $attributes
      * @return array|object
      */
-    public function update($id, array $attributes):array|object;
+    public function update($id, array $attributes);
 
     /**
      * Delete
      * @param $id
      * @return bool
      */
-    public function delete($id):bool;
+    public function delete($id);
 
     /**
      * updateOrInsert
@@ -46,5 +46,5 @@ interface RepositoryInterface
      * @param array $attributes
      * @return array|object
      */
-    public function updateOrInsert(array $conditions,array $attributes):array|object;
+    public function updateOrInsert(array $conditions,array $attributes);
 }
