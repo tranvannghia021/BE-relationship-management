@@ -1,0 +1,33 @@
+php artisan queue:work --queue=send_email --sleep=3 --tries=3 --daemon
+php artisan queue:work --queue=send_link_forgot_pass --sleep=3 --tries=3 --daemon
+=========================================
+create file in laradock php-worker/supervisord.d/send-mail.conf
+```
+[program:laravel-worker]
+logfile=/var/www/{{path}}/storage/logs/worker.log
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/{{path}}/artisan queue:work  --queue=send_email --sleep=3 --tries=3 --daemon
+autostart=true
+autorestart=true
+numprocs=2
+user=laradock
+redirect_stderr=true
+
+
+```
+create file in laradock php-worker/supervisord.d/send-mail-link-forgot.conf
+
+```
+[program:laravel-worker]
+logfile=/var/www/{{path}}/storage/logs/worker.log
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/{{path}}/artisan queue:work  --queue=send_link_forgot_pass --sleep=3 --tries=3 --daemon
+autostart=true
+autorestart=true
+numprocs=2
+user=laradock
+redirect_stderr=true
+
+```
+change {{path}} to project
+exec to project run 'php artisan queue:restart'

@@ -39,7 +39,7 @@ class UserService{
             if(empty($account)){
                 return $this->ApiResponseError('Errors,Register is failed,Please try again');
             }
-            SendMailVerifyRegisterJob::dispatch($account);//->onQueue("send_email")
+            SendMailVerifyRegisterJob::dispatch($account)->onConnection('redis')->onQueue("send_email");
             return $this->ApiResponse([],'Success,Please verify email',201);
         }catch (\Exception $exception){
             return $this->ApiResponseError('Errors');
@@ -148,8 +148,35 @@ class UserService{
         if(empty($account)){
             return $this->ApiResponseError("User not found");
         }
-        SendMailVerifyForgotPasswordJob::dispatch($account);
+        SendMailVerifyForgotPasswordJob::dispatch($account)->onConnection('redis')->onQueue('send_link_forgot_pass');
         return $this->ApiResponse(null,"Send link verify in your email");
 
+    }
+
+    public function deleteUser($request){
+        $account=$this->userRepo->find($request->input('userInfo.id'));
+        if(empty($account)){
+            return $this->ApiResponseError("User not found");
+        }
+        $account->delete();
+        return $this->ApiResponse(null,"Delete user success");
+    }
+
+    public function reSendLinkVerifyEmail($request){
+        $account=$this->userRepo->findBy([
+            'email'=>$request->input('email'),
+            'status'=>true,
+            'platform'=>config('auth.platform_app')
+        ]);
+        if(empty($account)){
+            return $this->ApiResponseError("User not found");
+        }
+        if($request->input('type') === 'register'){
+
+            SendMailVerifyRegisterJob::dispatch($account)->onConnection('redis')->onQueue("send_email");
+        }else{
+            SendMailVerifyForgotPasswordJob::dispatch($account)->onConnection('redis')->onQueue("send_link_forgot_pass");
+        }
+        return $this->ApiResponse(null,"sended link verify success");
     }
 }
