@@ -16,6 +16,7 @@ Route::group(['prefix'=>'account'],function (){
 
 Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
     Route::get('account',[UserController::class,'users']);
+    Route::put('account/change-password',[UserController::class,'changePassword']);
     Route::delete('account',[UserController::class,'deleteUser']);
 });
 
