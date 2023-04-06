@@ -179,4 +179,18 @@ class UserService{
         }
         return $this->ApiResponse(null,"sended link verify success");
     }
+
+    public function changePassword($request){
+        $account=$this->userRepo->find($request->input('userInfo.id'));
+        if(empty($account)){
+            return $this->ApiResponseError("User not found");
+        }
+        if(Hash::check($request->input('old_password'),$account['password'])){
+            $account->update([
+                'password'=>$request->input('new_password')
+            ]);
+            return $this->ApiResponse(null,"Update password success");
+        }
+        return $this->ApiResponseError("Password does not match");
+    }
 }
