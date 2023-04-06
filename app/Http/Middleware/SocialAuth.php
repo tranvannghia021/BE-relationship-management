@@ -18,6 +18,12 @@ class SocialAuth
     public function handle(Request $request, Closure $next): Response
     {
         $token=$request->input('state');
+        if(empty($token)){
+            return \response()->json([
+                'status'=>false,
+                'message'=>'State is required'
+            ],401);
+        }
         try {
             $payload=Common::decodeSocialAuth($token);
             $isExpire=Common::expireToken($payload['expire']);
@@ -28,7 +34,7 @@ class SocialAuth
                 ],401);
             }
             $request['state']=(array)$payload;
-        }catch (Exception $exception){
+        }catch (\Exception $exception){
             return \response()->json([
                 'status'=>false,
                 'message'=>'State is invalid'

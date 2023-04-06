@@ -11,29 +11,32 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendMailVerifyRegisterJob implements ShouldQueue
+class SendMailVerifyForgotPasswordJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $users;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     /**
      * Create a new job instance.
+     *
+     * @return void
      */
     public function __construct($users)
     {
-//        $this->OnQueue("send_email");
         $this->users=$users;
     }
 
     /**
      * Execute the job.
+     *
+     * @return void
      */
-    public function handle(): void
+    public function handle()
     {
-        Common::createCollection($this->users['id']);
-        $subject='Verify account from '.config('app.name');
+        $subject='Verify account forgot password from '.config('app.name');
 
-        $token=config('app.url').'/api/verify-email?token='.Common::encodeSocialAuth([
-                'type'=>'verify-email',
+        $token=config('app.url').'/api/verify-forgot-password?token='.Common::encodeSocialAuth([
+                'type'=>'verify-forgot-password',
                 'id'=>$this->users['id'],
                 'email'=>$this->users['email']
             ],60*5);

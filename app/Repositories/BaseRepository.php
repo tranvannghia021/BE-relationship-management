@@ -17,7 +17,7 @@ class BaseRepository implements RepositoryInterface
      *
      * @return array|object
      */
-    public function getAll():array|object
+    public function getAll()
     {
         return $this->model->all();
     }
@@ -27,7 +27,7 @@ class BaseRepository implements RepositoryInterface
      * @param  mixed $id
      * @return object|array
      */
-    public function find($id):array|object
+    public function find($id)
     {
         return $this->model->findOrFail($id);
     }
@@ -38,7 +38,7 @@ class BaseRepository implements RepositoryInterface
      * @param  mixed $data
      * @return  array|object
      */
-    public function create(array $data):array|object
+    public function create(array $data)
     {
         try {
             $model = $this->model->create($data);
@@ -54,7 +54,7 @@ class BaseRepository implements RepositoryInterface
      * @param  mixed $data
      * @return object|array
      */
-    public function update($id, array $data) :object|array
+    public function update($id, array $data)
     {
         try {
 
@@ -95,7 +95,7 @@ class BaseRepository implements RepositoryInterface
      * @param array $attributes
      * @return object|array
      */
-    public function updateOrInsert($conditions,array $attributes):object|array{
+    public function updateOrInsert($conditions,array $attributes){
         return $this->model->updateOrInsert($conditions,$attributes)->first();
     }
 }

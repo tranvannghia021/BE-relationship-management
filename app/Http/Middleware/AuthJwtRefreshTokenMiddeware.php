@@ -7,45 +7,47 @@ use App\Repositories\UserRepository;
 use Closure;
 use Illuminate\Http\Request;
 use Mockery\Exception;
-use Symfony\Component\HttpFoundation\Response;
 
-class VerifyLinkService
+class AuthJwtRefreshTokenMiddeware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        $token=$request->input('token');
+        $token=$request->header('Authorization');
         if(empty($token)){
             return \response()->json([
                 'status'=>false,
-                'message'=>'Link is failed'
+                'message'=>'Token refresh is required'
             ],401);
         }
         try {
-            $payload=Common::decodeSocialAuth($token);
+            $payload=Common::decodeJWTRefreshToken($token);
             $isExpire=Common::expireToken($payload['expire']);
             if($isExpire){
                 return \response()->json([
                     'status'=>false,
-                    'message'=>'Link is expired'
+                    'message'=>'Token refresh is expire'
                 ],401);
             }
-            $users=app(UserRepository::class)->find($payload['id']);
-            if(empty($users)){
+            $user=app(UserRepository::class)->find($payload['id']);
+            if(empty($user)){
                 return \response()->json([
                     'status'=>false,
                     'message'=>'User not found'
                 ],401);
             }
-            $request['userInfo']=$users;
+            unset($user['password']);
+            $request['userInfo']=$user;
         }catch (\Exception $exception){
             return \response()->json([
                 'status'=>false,
-                'message'=>'Link is invalid'
+                'message'=>'Token refresh is invalid'
             ],401);
         }
         return $next($request);
