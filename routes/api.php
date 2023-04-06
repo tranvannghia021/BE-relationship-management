@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 
 Route::group(['prefix'=>'account'],function (){
     Route::post('register',[UserController::class,'register']);
+    Route::patch('re-send-link',[UserController::class,'reSendLinkVerifyEmail']);
     Route::post('login',[UserController::class,'login']);
     Route::post('forgot',[UserController::class,'forgot']);
     Route::post('refresh-token',[UserController::class,'refreshToken'])->middleware('authJwt.refresh_token');
@@ -15,6 +16,7 @@ Route::group(['prefix'=>'account'],function (){
 
 Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
     Route::get('account',[UserController::class,'users']);
+    Route::delete('account',[UserController::class,'deleteUser']);
 });
 
 Route::group(['prefix'=>'','middleware'=>'auth.verify'],function (){
