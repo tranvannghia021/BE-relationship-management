@@ -187,7 +187,7 @@ class UserService{
         }
         if(Hash::check($request->input('old_password'),$account['password'])){
             $account->update([
-                'password'=>$request->input('new_password')
+                'password'=>Hash::make($request->input('new_password'))
             ]);
             return $this->ApiResponse(null,"Update password success");
         }

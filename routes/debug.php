@@ -15,7 +15,12 @@ Route::group(['prefix'=>''],function (){
     });
 });
 Route::get('php', function () {
+
     phpinfo();
 });
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
+
 
 
