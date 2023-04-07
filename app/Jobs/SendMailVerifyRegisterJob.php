@@ -29,17 +29,21 @@ class SendMailVerifyRegisterJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Common::createCollection($this->users['id']);
-        $subject='Verify account from '.config('app.name');
+        try {
+            Common::createCollection($this->users['id']);
+            $subject='Verify account from '.config('app.name');
 
-        $token=config('app.url').'/api/verify-email?token='.Common::encodeSocialAuth([
-                'type'=>'verify-email',
-                'id'=>$this->users['id'],
-                'email'=>$this->users['email']
-            ],60*5);
-        Mail::send('mails.verify-register',['token'=>$token],function  ($message) use ($subject){
-            $message->from(config('mail.from.address'))->to($this->users['email'])
-                ->subject($subject);
-        });
+            $token=config('app.url').'/api/verify-email?token='.Common::encodeSocialAuth([
+                    'type'=>'verify-email',
+                    'id'=>$this->users['id'],
+                    'email'=>$this->users['email']
+                ],60*5);
+            Mail::send('mails.verify-register',['token'=>$token],function  ($message) use ($subject){
+                $message->from(config('mail.from.address'))->to($this->users['email'])
+                    ->subject($subject);
+            });
+        }catch (\Exception $exception){
+            throw $exception;
+        }
     }
 }
