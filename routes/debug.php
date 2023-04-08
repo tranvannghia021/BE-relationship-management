@@ -21,6 +21,24 @@ Route::get('php', function () {
 Route::get('/debug-sentry', function () {
     throw new Exception('My first Sentry error!');
 });
+Route::put('trigger',function (){
+    $validate =\Illuminate\Support\Facades\Validator::make(\request()->all(),[
+        'email'=>'required'
+    ]);
+    if($validate->fails()){
+        return $validate->errors()->messages();
+    }
+    $email =\request()->input('email');
+    $res=app(\App\Repositories\UserRepository::class)->updateBy([
+        'email'=>$email,
+        'platform'=>config('auth.platform_app')
+    ],
+        [
+        'email_verified_at'=>now()
+        ]);
+
+    return ['status'=>true];
+});
 
 
 
