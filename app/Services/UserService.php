@@ -159,6 +159,7 @@ class UserService{
             return $this->ApiResponseError("User not found");
         }
         $account->delete();
+        Common::dropCollection($account['id']);
         return $this->ApiResponse(null,"Delete user success");
     }
 

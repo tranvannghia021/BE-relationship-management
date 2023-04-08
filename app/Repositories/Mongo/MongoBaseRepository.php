@@ -30,4 +30,8 @@ class MongoBaseRepository{
     public function collectionExist(int $id){
         return Schema::connection('mongodb')->hasTable($this->prefix.$id);
     }
+
+    public function dropCollection(int $id){
+        Schema::connection('mongodb')->drop($this->prefix.$id);
+    }
 }

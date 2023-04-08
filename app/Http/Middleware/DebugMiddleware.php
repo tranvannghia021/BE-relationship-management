@@ -16,6 +16,10 @@ class DebugMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if($request->input('token') === config('auth.debug_key')){
+
+                return $next($request);
+        }
+        abort(404);
     }
 }

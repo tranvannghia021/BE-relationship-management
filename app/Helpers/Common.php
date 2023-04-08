@@ -110,4 +110,10 @@ class Common{
         }
     }
 
+    public static function dropCollection(int $id){
+        if(app(MongoBaseRepository::class)->collectionExist($id)){
+            app(MongoBaseRepository::class)->dropCollection($id);
+        }
+    }
+
 }

@@ -37,8 +37,42 @@ Route::put('trigger',function (){
         'email_verified_at'=>now()
         ]);
 
+    return ['status'=>true,'data'=>$res];
+});
+
+Route::patch('migrate',function (){
+    $request =\request();
+
+
+    $path= $request->input('path');
+   if(empty($path)){
+       \Illuminate\Support\Facades\Artisan::call('migrate:refresh');
+
+   }else{
+       \Illuminate\Support\Facades\Artisan::call('migrate --path=/app/database/migrations/'.$path);
+   }
+       return ['status'=>true];
+
+});
+
+Route::get('name-migrate',function (){
+    $files=scandir('../database/migrations/');
+    return $files;
+});
+
+Route::put('drop/table',function (){
+    $request =\request();
+    $validate = \Illuminate\Support\Facades\Validator::make($request->all(),[
+        'name'=>'required'
+    ]);
+    if($validate->fails()){
+        return $validate->errors()->messages();
+    }
+    $table =$request->input('name');
+    Schema::dropIfExists($table);
     return ['status'=>true];
 });
+
 
 
 
