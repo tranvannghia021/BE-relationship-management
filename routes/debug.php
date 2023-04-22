@@ -73,6 +73,11 @@ Route::put('drop/table',function (){
     return ['status'=>true];
 });
 
+Route::get('env',function (){
+    $fileName=\request()->input('name','app');
+    dd(config($fileName));
+});
+
 
 
 
