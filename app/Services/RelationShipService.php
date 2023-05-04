@@ -135,4 +135,9 @@ class RelationShipService
             ->updateOne($id,$payloadInsert);
         return $this->ApiResponse([], 'Update people success');
     }
+
+    public function deletePeople($id,array $payload){
+       $this->relationShipRepository->setCollection($payload['shop_id'])->deleteOne($id);
+        return $this->ApiResponse([],"Delete people success");
+    }
 }

@@ -83,22 +83,22 @@ class RelationshipRepository extends MongoBaseRepository{
         return $this->db->select($select)->whereIn('_id', $ids)->where('ready_to_push', config('constants.READY_TO_PUSH.PRODUCT_IS_READY'))->get()->toArray();
     }
 
-    public function deleteOne($payload) {
+    public function deleteOne($id) {
         $dataBulkWrite = [];
 
-        if (!empty($payload)) {
-            foreach ($payload as $product) {
-                if (empty($product['_id'])) {
-                    continue;
-                }
+        if (!empty($id)) {
+//            foreach ($payload as $product) {
+//                if (empty($product['_id'])) {
+//                    continue;
+//                }
                 $dataBulkWrite[] = [
                     'deleteOne' => [
                         [
-                            '_id' => new ObjectId($product['_id'])
+                            '_id' => new ObjectId($id)
                         ]
                     ]
                 ];
-            }
+//            }
         }
 
         if (!empty($dataBulkWrite)) {

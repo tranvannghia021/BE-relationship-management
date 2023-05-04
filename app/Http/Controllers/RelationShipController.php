@@ -66,4 +66,11 @@ class RelationShipController extends Controller
         ];
         return $this->relationShipService->updatePeople($id,$payload);
     }
+
+    public function deletePeople(Request $request,$id){
+        $payload=[
+            'shop_id'=>$request->input('userInfo.id')
+        ];
+        return $this->relationShipService->deletePeople($id,$payload);
+    }
 }
