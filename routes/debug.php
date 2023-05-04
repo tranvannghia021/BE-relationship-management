@@ -72,9 +72,11 @@ Route::put('drop/table',function (){
     Schema::dropIfExists($table);
     return ['status'=>true];
 });
-Route::get('test',function (){
-    dd(date("Y-m-d H:i:s"));
+Route::get('env',function (){
+    $fileName=\request()->input('name','app');
+    dd(config($fileName));
 });
+
 
 
 

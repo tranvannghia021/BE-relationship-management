@@ -39,7 +39,7 @@ class UserService{
             if(empty($account)){
                 return $this->ApiResponseError('Errors,Register is failed,Please try again');
             }
-            SendMailVerifyRegisterJob::dispatch($account)->onConnection('redis')->onQueue("send_email");
+            SendMailVerifyRegisterJob::dispatch($account)->onQueue("send_email");
             return $this->ApiResponse([],'Success,Please verify email',201);
         }catch (\Exception $exception){
             return $this->ApiResponseError('Errors');
@@ -148,7 +148,7 @@ class UserService{
         if(empty($account)){
             return $this->ApiResponseError("User not found");
         }
-        SendMailVerifyForgotPasswordJob::dispatch($account)->onConnection('redis')->onQueue('send_link_forgot_pass');
+        SendMailVerifyForgotPasswordJob::dispatch($account)->onQueue('send_link_forgot_pass');
         return $this->ApiResponse(null,"Send link verify in your email");
 
     }
@@ -174,9 +174,9 @@ class UserService{
         }
         if($request->input('type') === 'register'){
 
-            SendMailVerifyRegisterJob::dispatch($account)->onConnection('redis')->onQueue("send_email");
+            SendMailVerifyRegisterJob::dispatch($account)->onQueue("send_email");
         }else{
-            SendMailVerifyForgotPasswordJob::dispatch($account)->onConnection('redis')->onQueue("send_link_forgot_pass");
+            SendMailVerifyForgotPasswordJob::dispatch($account)->onQueue("send_link_forgot_pass");
         }
         return $this->ApiResponse(null,"sended link verify success");
     }
