@@ -194,4 +194,17 @@ class UserService{
         }
         return $this->ApiResponseError("Password does not match");
     }
+
+    public function updateUser(array $payload){
+        $id=$payload['userInfo']['id'];
+        unset($payload['userInfo']);
+        if(!empty($payload['avatar'])){
+            $payload['avatar']=config('app.url')."/storage/avatar/".Common::saveImgBase64('avatar',$payload['avatar']);
+        }
+        $this->userRepo->updateBy([
+            'id'=>$id
+        ],$payload);
+
+        return $this->ApiResponse([],"Update user success");
+    }
 }

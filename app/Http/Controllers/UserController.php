@@ -62,4 +62,23 @@ class UserController extends Controller
     public function changePassword(ChangePasswordRequest $request){
         return $this->userService->changePassword($request);
     }
+
+    public function updateUsers(Request $request){
+        $request=$request->only([
+            'name',
+            'avatar',
+            'email',
+            'gender',
+            'birthday',
+            'phone',
+            'address',
+            'status',
+            'userInfo'
+        ]);
+        if(!empty($request['name'])){
+            $request['first_name']=$request['name'];
+            unset($request['name']);
+        }
+        return $this->userService->updateUser($request);
+    }
 }
