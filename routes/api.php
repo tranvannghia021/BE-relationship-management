@@ -5,6 +5,7 @@ use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\VerifyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RelationShipController;
+use App\Http\Controllers\AppointmentController;
 
 
 Route::group(['prefix'=>'account'],function (){
@@ -26,6 +27,10 @@ Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
         Route::post('{id}',[RelationShipController::class,'updatePeople']);
         Route::delete('{id}',[RelationShipController::class,'deletePeople']);
         Route::post('create',[RelationShipController::class,'createPeople']);
+    });
+
+    Route::group(['prefix'=>'appointment'],function (){
+        Route::get('',[AppointmentController::class,'getList']);
     });
 });
 

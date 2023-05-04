@@ -14,6 +14,7 @@ class Appointment extends Model
     protected $fillable=[
         'relationship_id',
         'name',
+        'user_id',
         'address',
         'notes',
         'time'
@@ -21,8 +22,5 @@ class Appointment extends Model
     protected $casts=[
         'time'=>'datetime'
     ];
-
-
-
 
 }
