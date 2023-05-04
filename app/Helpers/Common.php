@@ -1,9 +1,12 @@
 <?php
 namespace App\Helpers;
+use App\Repositories\CategoryRepository;
 use App\Repositories\Mongo\MongoBaseRepository;
 use App\Repositories\Mongo\RelationshipRepository;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Pusher\Pusher;
 
 class Common{
@@ -114,6 +117,47 @@ class Common{
         if(app(MongoBaseRepository::class)->collectionExist($id)){
             app(MongoBaseRepository::class)->dropCollection($id);
         }
+    }
+
+    public static function getTags($id){
+        $tags=Cache::get('tags_'.$id);
+        if(empty($tags)){
+            $tags=app(CategoryRepository::class)->getAllById($id);
+            $temp=[];
+            foreach ($tags as $tag){
+                $temp[]=[
+                    'name'=>$tag['name'],
+                ];
+            }
+            Cache::put('tags_'.$id,$temp);
+            $tags=$temp;
+        }
+        return $tags;
+    }
+
+    public static function saveImgBase64($folder, $param)
+    {
+        $fileExtension = ['png', 'jpg', 'jpeg', 'gif'];
+
+        if (count(explode(';', $param)) != 2) return false;
+        list($extension, $content) = explode(';', $param);
+        $tmpExtension = explode('/', $extension);
+        if (!in_array($tmpExtension[1], $fileExtension)) {
+
+            return false;
+        }
+        preg_match('/.([0-9]+) /', microtime(), $m);
+        $fileName = sprintf('img%s%s.%s', date('YmdHis'), $m[1], $tmpExtension[1]);
+        $content = explode(',', $content)[1];
+        $storage = Storage::disk('public');
+
+        $checkDirectory = $storage->exists($folder);
+
+        if (!$checkDirectory) {
+            $storage->makeDirectory($folder);
+        }
+        $storage->put($folder . '/' . $fileName, base64_decode($content), 'public');
+        return $fileName;
     }
 
 }

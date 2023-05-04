@@ -12,7 +12,8 @@ class Category extends Model
     protected $connection='pgsql';
     protected $table='categories';
     protected $fillable=[
-        'name'
+        'name',
+        'user_id',
     ];
 
 }

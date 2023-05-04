@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\VerifyController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RelationShipController;
 
 
 Route::group(['prefix'=>'account'],function (){
@@ -18,6 +19,13 @@ Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
     Route::get('account',[UserController::class,'users']);
     Route::put('account/change-password',[UserController::class,'changePassword']);
     Route::delete('account',[UserController::class,'deleteUser']);
+
+    Route::group(['prefix'=>'relationship'],function (){
+        Route::get('',[RelationShipController::class,'getList']);
+        Route::get('{id}',[RelationShipController::class,'getDetail']);
+        Route::post('{id}',[RelationShipController::class,'updatePeople']);
+        Route::post('create',[RelationShipController::class,'createPeople']);
+    });
 });
 
 Route::group(['prefix'=>'','middleware'=>'auth.verify'],function (){
