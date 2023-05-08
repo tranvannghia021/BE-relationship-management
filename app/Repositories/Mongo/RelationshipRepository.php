@@ -67,7 +67,7 @@ class RelationshipRepository extends MongoBaseRepository{
         if(!empty($filter['keyword'])){
             $rawData->where('full_name','like','%'.trim($filter['keyword']).'%');
         }
-        return $rawData->simplePaginate($paginate['limit']);
+        return $rawData->Paginate($paginate['limit']);
     }
 
     public function dropCollection($suffixCollection): void

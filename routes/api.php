@@ -24,9 +24,9 @@ Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
     Route::group(['prefix'=>'relationship'],function (){
         Route::get('',[RelationShipController::class,'getList']);
         Route::get('{id}',[RelationShipController::class,'getDetail']);
+        Route::post('create',[RelationShipController::class,'createPeople']);
         Route::post('{id}',[RelationShipController::class,'updatePeople']);
         Route::delete('{id}',[RelationShipController::class,'deletePeople']);
-        Route::post('create',[RelationShipController::class,'createPeople']);
     });
 
     Route::group(['prefix'=>'appointment'],function (){

@@ -30,7 +30,6 @@ class RelationShipService
                     'category_name',
                     'full_name'
                 ])->toArray();
-
             $people = [];
             if (!empty($listRela['data'])) {
                 foreach ($listRela['data'] as $user) {
@@ -48,6 +47,11 @@ class RelationShipService
                 'tags' => Common::getTags($payload['shop_id']) ?? [],
                 'people' => $people,
                 'pagination' => [
+                    'total'=>$listRela['total'],
+                    'limit'=>(int)$listRela['per_page'],
+                    'currentPage'=>$listRela['current_page'],
+                    'items'=>$people,
+                    'pages'=>$payload['pagination']['page'],
                     'prev' => $listRela['prev_page_url'],
                     'next' => $listRela['next_page_url'],
                 ],
