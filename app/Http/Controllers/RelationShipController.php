@@ -21,6 +21,7 @@ class RelationShipController extends Controller
             ],
             'pagination'=>[
                 'limit'=>$request->input('limit',10),
+                'page'=>$request->input('page',1),
 //                'next'=>$request->input('next'),
 //                'prev'=>$request->input('prev'),
 //                'has_prev_next'=>!(@$request->input('prev')===null && @$request->input('next') === null),

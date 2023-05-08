@@ -15,8 +15,8 @@ class CreateAppointmentTable extends Migration
     {
         Schema::create('appointment', function (Blueprint $table) {
             $table->id();
-            $table->integer('relationship_id');
-            $table->integer('user_id');
+            $table->string('relationship_id');
+            $table->bigInteger('user_id');
             $table->string('name')->nullable()->index();
             $table->text('address')->nullable();
             $table->date('time')->default(date("Y-m-d H:i:s"));
