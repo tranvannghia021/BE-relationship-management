@@ -6,6 +6,7 @@ use App\Http\Controllers\VerifyController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RelationShipController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\TagsController;
 
 
 Route::group(['prefix'=>'account'],function (){
@@ -36,6 +37,15 @@ Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
         Route::post('/create',[AppointmentController::class,'createAppointment']);
         Route::post('/{id}',[AppointmentController::class,'update']);
         Route::delete('/{id}',[AppointmentController::class,'delete']);
+    });
+
+
+    Route::group(['prefix'=>'tags'],function (){
+        Route::get('',[TagsController::class,'index']);
+        Route::get('{id}',[TagsController::class,'show']);
+        Route::post('create',[TagsController::class,'store']);
+        Route::put('{id}',[TagsController::class,'update']);
+        Route::delete('{id}',[TagsController::class,'destroy']);
     });
 });
 
