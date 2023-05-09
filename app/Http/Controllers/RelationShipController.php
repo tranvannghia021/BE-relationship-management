@@ -44,7 +44,7 @@ class RelationShipController extends Controller
         $payload=[
             'full_name'=>$request->input('name'),
             'tag'=>$request->input('tag'),
-            'date_meeting'=>$request->input('date_meeting'),
+            'first_meeting'=>$request->input('first_meeting'),
             'email'=>$request->input('email'),
             'phone'=>$request->input('phone'),
             'avatar'=>$request->input('avatar'),
@@ -58,7 +58,7 @@ class RelationShipController extends Controller
         $payload=[
             'full_name'=>$request->input('name'),
             'tag'=>$request->input('tag'),
-            'date_meeting'=>$request->input('date_meeting'),
+            'first_meeting'=>$request->input('first_meeting'),
             'email'=>$request->input('email'),
             'phone'=>$request->input('phone'),
             'avatar'=>$request->input('avatar'),

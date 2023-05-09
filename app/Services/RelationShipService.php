@@ -25,7 +25,7 @@ class RelationShipService
                 ->getByFilter($payload['filter'], $payload['pagination'], [
                     '_id',
                     'avatar',
-                    'last_meeting',
+                    'first_meeting',
                     'notes',
                     'category_name',
                     'full_name'
@@ -36,7 +36,7 @@ class RelationShipService
                     $people[] = [
                         '_id' => (string)new ObjectId($user['_id']),
                         'avatar' => @$user['avatar'],
-                        'last_meeting' => @$user['last_meeting'],
+                        'first_meeting' => @$user['first_meeting'],
                         'notes' => $user['notes'],
                         'tag' => $user['category_name'],
                         'full_name' => $user['full_name']
@@ -68,7 +68,7 @@ class RelationShipService
             ->find($payload['id'], [
                 '_id',
                 'avatar',
-                'date_meeting',
+                'first_meeting',
                 'notes',
                 'category_name',
                 'full_name',
@@ -81,7 +81,7 @@ class RelationShipService
         $data = [
             '_id' => (string)new ObjectId($userRaw['_id']),
             'avatar' => @$userRaw['avatar'],
-            'date_meeting' => $userRaw['date_meeting'],
+            'first_meeting' => $userRaw['first_meeting'],
             'notes' => $userRaw['notes'],
             'email' => $userRaw['email'],
             'phone' => $userRaw['phone'],
@@ -108,7 +108,7 @@ class RelationShipService
             'full_name' => $payload['full_name'],
             'avatar' => $avatar,
             'phone' => $payload['phone'],
-            'date_meeting' => $payload['date_meeting'],
+            'first_meeting' => $payload['first_meeting'],
             'email' => $payload['email'],
             'notes' => $payload['notes'],
         ];
@@ -124,7 +124,7 @@ class RelationShipService
             'category_name' => $payload['tag'],
             'full_name' => $payload['full_name'],
             'phone' => $payload['phone'],
-            'date_meeting' => $payload['date_meeting'],
+            'first_meeting' => $payload['first_meeting'],
             'email' => $payload['email'],
             'notes' => $payload['notes'],
         ];

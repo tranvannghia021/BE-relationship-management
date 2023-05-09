@@ -16,23 +16,18 @@ class AppointmentRepository extends BaseRepository
         $this->appointment=$appointment;
     }
     public function getListByFilter($userId,$filter,$paginate,$select=['*']){
-        $rawData=$this->appointment->where('user_id',$userId)->select([
-            'id',
-            'relationship_id',
-            'name',
-            'address',
-            'notes',
-            'time',
-            DB::raw("to_char(created_at, 'YYYY-MM') AS date")
-        ]);
+        $rawData=$this->appointment->where('user_id',$userId)->select($select);
+        if(!empty($filter['keyword'])){
+            $rawData->where('name','like','%'.$filter['keyword'].'%');
+        }
         if(!empty($filter['from_date'])){
-            $rawData->where('time','>=',$filter['from_date']);
+            $rawData->where('date_meeting','>=',$filter['from_date']);
         }
         if(!empty($filter['to_date'])){
-            $rawData->where('time','<',$filter['to_date']);
+            $rawData->where('date_meeting','<',$filter['to_date']);
         }
         return $rawData->orderBy('date','DESC')
-                ->simplePaginate($paginate['limit']);
+                ->Paginate($paginate['limit']);
 
     }
 }

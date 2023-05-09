@@ -12,15 +12,17 @@ class Appointment extends Model
     protected $connection='pgsql';
     protected $table='appointment';
     protected $fillable=[
-        'relationship_id',
-        'name',
+        'relationship_ids',
+        'type',
         'user_id',
         'address',
+        'name',
         'notes',
-        'time'
+        'date_meeting'
     ];
     protected $casts=[
-        'time'=>'datetime'
+        'time'=>'datetime',
+        'relationship_ids'=>'array'
     ];
 
 }

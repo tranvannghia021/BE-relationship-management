@@ -1,4 +1,6 @@
 <?php
+
+use Illuminate\Support\Carbon;
 use \Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
@@ -78,5 +80,45 @@ Route::get('env',function (){
 });
 
 
-
+Route::get('test',function (){
+    dd((new Carbon(request()->input('from_date',Carbon::now()->addDay(-5)->toISOString())))->toDateTimeString());
+$time='2023-05-09T09:03:06.560752Z';
+//   $e=;
+//dd($e);
+    $array=[
+        'status'=>true,
+        'data'=>[
+            '01-2023'=>[
+                [
+                    'id'=>1,
+                    'title'=>'cuộc hẹn 1',
+                    'vâng vâng'
+                ],
+                [
+                    'id'=>2,
+                    'title'=>'cuộc hẹn 2',
+                    'vâng vâng'
+                ]
+            ],
+            '02-2023'=>[
+                [
+                    'id'=>5,
+                    'title'=>'cuộc hẹn 7',
+                    'vâng vâng'
+                ],
+                [
+                    'id'=>6,
+                    'title'=>'cuộc hẹn 8',
+                    'vâng vâng'
+                ]
+            ]
+        ],
+        'pagination'=>[
+            'next'=>null,
+            'prev'=>null,
+            ' vâng vâng '
+        ]
+    ];
+    return response()->json($array);
+});
 
