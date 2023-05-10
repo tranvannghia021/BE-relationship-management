@@ -18,6 +18,7 @@ class RelationShipController extends Controller
         $payload=[
             'filter'=>[
                 'keyword'=>$request->input('keyword',''),
+                'type'=>$request->input('type'),
             ],
             'pagination'=>[
                 'limit'=>$request->input('limit',10),

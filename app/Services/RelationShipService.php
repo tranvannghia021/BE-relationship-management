@@ -31,8 +31,9 @@ class RelationShipService
                     'full_name'
                 ])->toArray();
             $people = [];
-            if (!empty($listRela['data'])) {
-                foreach ($listRela['data'] as $user) {
+            $dataRaw=@$listRela['data'] ?? $listRela;
+            if (!empty($dataRaw)) {
+                foreach ($dataRaw as $user) {
                     $people[] = [
                         '_id' => (string)new ObjectId($user['_id']),
                         'avatar' => @$user['avatar'],
@@ -47,18 +48,18 @@ class RelationShipService
                 'tags' => Common::getTags($payload['shop_id']) ?? [],
                 'people' => $people,
                 'pagination' => [
-                    'total'=>$listRela['total'],
-                    'limit'=>(int)$listRela['per_page'],
-                    'currentPage'=>$listRela['current_page'],
+                    'total'=>@$listRela['total'],
+                    'limit'=>(int)@$listRela['per_page'],
+                    'currentPage'=>@$listRela['current_page'],
                     'items'=>$people,
                     'pages'=>$payload['pagination']['page'],
-                    'prev' => $listRela['prev_page_url'],
-                    'next' => $listRela['next_page_url'],
+                    'prev' => @$listRela['prev_page_url'],
+                    'next' => @$listRela['next_page_url'],
                 ],
             ];
             return $this->ApiResponse($data, 'List relationship');
         } catch (\Exception $exception) {
-            return $this->ApiResponseError('Error,Please try again');
+            return $this->ApiResponseError($exception->getMessage());
         }
     }
 
