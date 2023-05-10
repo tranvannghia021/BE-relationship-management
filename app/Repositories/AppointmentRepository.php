@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use function Sodium\add;
 
 class AppointmentRepository extends BaseRepository
 {
@@ -29,5 +30,25 @@ class AppointmentRepository extends BaseRepository
         return $rawData->orderBy('date','DESC')
                 ->Paginate($paginate['limit']);
 
+    }
+
+    public function getAllAutoUpdateStatus(){
+        return$this->appointment->whereNotNull('date_meeting')
+            ->where('date_meeting','>=',Carbon::now()->addDay()->toDateTimeString())
+            ->where('status','coming')->update([
+                'status'=>'cancel'
+            ]);
+    }
+
+    public function getUserReadyTimeBySetting($day){
+       return $this->appointment->whereNotNull('date_meeting')
+           ->where('date_meeting','<=',Carbon::now()->addDay($day)->toDateTimeString())
+           ->where('status','coming')->select([
+               'id',
+               'name',
+               'date_meeting',
+               'address',
+               'type',
+           ])->get()->toArray();
     }
 }

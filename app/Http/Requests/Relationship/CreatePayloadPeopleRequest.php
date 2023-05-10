@@ -27,7 +27,7 @@ class CreatePayloadPeopleRequest extends BaseRequest
         return [
             'name'=>'required|min:3',
             'tag'=>'required|string',
-            'date_meeting'=>'required',
+            'first_meeting'=>'required',
             'email'=>'required|email',
             'phone'=>'required'
         ];

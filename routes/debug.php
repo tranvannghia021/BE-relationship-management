@@ -1,5 +1,6 @@
 <?php
 
+use App\Repositories\UserRepository;
 use Illuminate\Support\Carbon;
 use \Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -78,47 +79,35 @@ Route::get('env',function (){
     $fileName=\request()->input('name','app');
     dd(config($fileName));
 });
-
+Route::get('run-add',function (){
+    try {
+        Schema::table('users', function (\Illuminate\Database\Schema\Blueprint $table) {
+            $table->jsonb('settings')->after('status')->default(json_encode([
+                'user_long_time'=>7,
+                'ready_time_appointment'=>1
+            ]));
+        });
+        Schema::table('appointment', function (\Illuminate\Database\Schema\Blueprint $table) {
+            $table->enum('status',['coming','done','cancel'])->default('coming');
+        });
+        return true;
+    }catch (\Exception $exception){
+        return $exception->getMessage();
+    }
+});
 
 Route::get('test',function (){
-    dd((new Carbon(request()->input('from_date',Carbon::now()->addDay(-5)->toISOString())))->toDateTimeString());
-$time='2023-05-09T09:03:06.560752Z';
-//   $e=;
-//dd($e);
-    $array=[
-        'status'=>true,
-        'data'=>[
-            '01-2023'=>[
-                [
-                    'id'=>1,
-                    'title'=>'cuộc hẹn 1',
-                    'vâng vâng'
-                ],
-                [
-                    'id'=>2,
-                    'title'=>'cuộc hẹn 2',
-                    'vâng vâng'
-                ]
-            ],
-            '02-2023'=>[
-                [
-                    'id'=>5,
-                    'title'=>'cuộc hẹn 7',
-                    'vâng vâng'
-                ],
-                [
-                    'id'=>6,
-                    'title'=>'cuộc hẹn 8',
-                    'vâng vâng'
-                ]
-            ]
-        ],
-        'pagination'=>[
-            'next'=>null,
-            'prev'=>null,
-            ' vâng vâng '
-        ]
-    ];
-    return response()->json($array);
+    try {
+        $users=app(UserRepository::class)->getAllUserLongTime();
+        $currenDate= \Carbon\Carbon::now()->toDateTimeString();
+        foreach ($users as $user){
+            if($user['user_long_time'] < $currenDate){
+                echo "asdasd";
+            }
+        }
+        dd($users);
+    }catch (\Exception $exception){
+        dd($exception->getMessage());
+    }
 });
 

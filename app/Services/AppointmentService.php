@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\Mongo\RelationshipRepository;
 use App\Traits\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use MongoDB\BSON\ObjectId;
 
@@ -29,6 +30,7 @@ class AppointmentService
                     'address',
                     'name',
                     'notes',
+                    'status',
                     'date_meeting',
                     DB::raw("to_char(date_meeting, 'MM-YYYY') AS date")
                 ]);
@@ -61,9 +63,8 @@ class AppointmentService
         if(!empty($appointment['relationship_ids'])){
             $relationShips=$this->relationshipRepository->setCollection($payload['shop_id'])
                 ->finds($appointment['relationship_ids']);
-            dd($relationShips);
-        }
 
+        }
 
         $temp=[];
 
@@ -115,4 +116,25 @@ class AppointmentService
         $appointment->delete();
         return $this->ApiResponse([],"Delete appointment success");
     }
+
+    public function status(int $id){
+        $appointment=$this->appointmentRepository->find($id);
+        if(empty($appointment)){
+            return $this->ApiResponseError("Appointment not found");
+        }
+
+        $appointment->update([
+            'status'=>'done',
+        ]);
+        return $this->ApiResponse([],"Update status appointment success");
+    }
+
+    public function updateLastMeeting($ids){
+        foreach ($ids as $key=> $id){
+            $ids[$key]['last_meeting']=Carbon::now()->toDateTimeString();
+        }
+        $this->relationshipRepository->update($ids);
+    }
+
+
 }

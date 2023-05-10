@@ -15,7 +15,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+//        if (config('app.env') !== 'local') {
+            $schedule->command('appointment:auto-update-status')->everyMinute();
+            $schedule->command('user:long-time')->everyMinute();
+            $schedule->command('appointment:ready-time')->everyMinute();
+//        }
     }
 
     /**

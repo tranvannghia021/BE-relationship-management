@@ -9,6 +9,7 @@ use App\Http\Requests\ChangePasswordRequest;
 use App\Services\UserService;
 use App\Traits\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -73,8 +74,10 @@ class UserController extends Controller
             'phone',
             'address',
             'status',
-            'userInfo'
+            'userInfo',
+            'settings',
         ]);
+
         if(!empty($request['name'])){
             $request['first_name']=$request['name'];
             unset($request['name']);

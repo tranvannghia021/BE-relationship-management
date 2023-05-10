@@ -73,4 +73,12 @@ class AppointmentController extends Controller
 
         return $this->appointmentService->delete($id);
     }
+
+
+    public function status(Request $request,$id){
+
+        return $this->appointmentService->status($id);
+    }
+
+
 }

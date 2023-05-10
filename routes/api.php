@@ -34,6 +34,7 @@ Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
     Route::group(['prefix'=>'appointment'],function (){
         Route::get('',[AppointmentController::class,'getList']);
         Route::get('/{id}',[AppointmentController::class,'getDetail']);
+        Route::patch('/{id}',[AppointmentController::class,'status']);
         Route::post('/create',[AppointmentController::class,'createAppointment']);
         Route::post('/{id}',[AppointmentController::class,'update']);
         Route::delete('/{id}',[AppointmentController::class,'delete']);

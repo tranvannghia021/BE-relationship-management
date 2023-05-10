@@ -1,5 +1,6 @@
 <?php
 namespace App\Repositories\Mongo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use MongoDB\BSON\ObjectId;
@@ -67,6 +68,7 @@ class RelationshipRepository extends MongoBaseRepository{
         if(!empty($filter['keyword'])){
             $rawData->where('full_name','like','%'.trim($filter['keyword']).'%');
         }
+        $rawData->orderBy('_id','DESC');
         return $rawData->Paginate($paginate['limit']);
     }
 
@@ -161,5 +163,17 @@ class RelationshipRepository extends MongoBaseRepository{
                 );
             });
         }
+    }
+
+    public function getUserLongTimeBySetting($day){
+        return $this->db->whereNotNull('last_meeting')
+            ->where('last_meeting','<=',Carbon::now()->addDay(-$day)->toDateTimeString())
+            ->select([
+                '_id',
+                'full_name',
+                'tag',
+                'avatar'
+            ])
+            ->get()->toArray();
     }
 }

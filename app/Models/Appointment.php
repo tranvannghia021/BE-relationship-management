@@ -16,6 +16,7 @@ class Appointment extends Model
         'type',
         'user_id',
         'address',
+        'status',
         'name',
         'notes',
         'date_meeting'
