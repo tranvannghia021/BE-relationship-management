@@ -112,6 +112,7 @@ class RelationShipService
             'first_meeting' => $payload['first_meeting'],
             'email' => $payload['email'],
             'notes' => $payload['notes'],
+            'is_notification'=>false
         ];
         $this->relationShipRepository->setCollection($payload['shop_id'])
             ->insert($payloadInsert);

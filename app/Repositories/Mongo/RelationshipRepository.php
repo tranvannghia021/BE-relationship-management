@@ -185,5 +185,20 @@ class RelationshipRepository extends MongoBaseRepository{
             ->get()->toArray();
     }
 
+    public function getUserLongTimeBySettingTEST($day){
+        return $this->db
+//            ->whereNotNull('last_meeting')
+//            ->whereNotNull('is_notification')
+//            ->where('last_meeting','>=',Carbon::now()->addDay(-$day)->toDateTimeString())
+//            ->where('is_notification',false)
+            ->select([
+                '_id',
+                'full_name',
+                'tag',
+                'avatar'
+            ])
+            ->get()->toArray();
+    }
+
 
 }

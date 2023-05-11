@@ -37,7 +37,7 @@ class SendPusherNotificationLongTimeJob implements ShouldQueue
             '_id'=>(string) new ObjectId($this->people['_id']),
             'full_name'=>$this->people['full_name'],
             'avatar'=>$this->people['avatar'],
-            'tag'=>$this->people['tag']
+            'tag'=>@$this->people['tag']
         ];
         PusherHelper::pusher($this->userId,$data,'notification_');
     }

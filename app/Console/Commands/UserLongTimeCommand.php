@@ -47,7 +47,7 @@ class UserLongTimeCommand extends Command
             if (!empty($users)){
                 foreach ($users as $user){
                     $people=app(RelationshipRepository::class)->setCollection($user['id'])->
-                    getUserLongTimeBySetting($users['user_long_time']);
+                    getUserLongTimeBySetting($user['user_long_time']);
                     if(!empty($people)){
                         $ids=[];
                         foreach ($people as $item){

@@ -1,5 +1,7 @@
 <?php
 
+use App\Jobs\SendPusherNotificationLongTimeJob;
+use App\Jobs\SendPusherNotificationReadyTimeMeetJob;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\Mongo\RelationshipRepository;
 use App\Repositories\UserRepository;
@@ -98,21 +100,42 @@ Route::get('run-add',function (){
     }
 });
 
-Route::get('test',function (){
+Route::get('notification-long-time',function (){
+    $users=app(UserRepository::class)->getAll();
 
-    $people=app(RelationshipRepository::class)->setCollection(1)->
-    getUserLongTimeBySetting(2);
-    $ids=\Illuminate\Support\Arr::pluck($people,'_id');
-    $temp=[];
-    foreach ($ids as $id){
+    if (!empty($users)){
+        foreach ($users->toArray() as $user){
+            $people=app(RelationshipRepository::class)->setCollection($user['id'])->
+            getUserLongTimeBySettingTEST($user['settings']['user_long_time']);
 
-        $temp[]=[
-            '_id'=>(string)new \MongoDB\BSON\ObjectId($id),
-             'is_notification'=>false
-        ];
+            if(!empty($people)){
+                $ids=[];
+                foreach ($people as $item){
+                    $ids[]=[
+                        '_id'=>(string)new \MongoDB\BSON\ObjectId($item['_id']),
+                        'is_notification'=>true
+                    ];
+                    SendPusherNotificationLongTimeJob::dispatch($user['id'],$item)->onQueue('notification-long-time');
+                }
+//                app(RelationshipRepository::class)->setCollection($user['id'])->update($ids);
+            }
+        }
     }
-
-    $appointments= app(RelationshipRepository::class)->setCollection(1)->update($temp);
-    dd($appointments);
+    dd('ok');
+});
+Route::get('notification-ready-time',function (){
+    $users=app(UserRepository::class)->getAll();
+    if(!empty($users)){
+        foreach ($users as $user){
+            $appointments= app(AppointmentRepository::class)->getUserReadyTimeBySettingTEST($user['settings']['ready_time_appointment']);
+            if(!empty($appointments)){
+                foreach ($appointments as $appointment){
+                    SendPusherNotificationReadyTimeMeetJob::dispatch($user['id'],$appointment)->onQueue('notification-ready-time');
+                }
+//                app(AppointmentRepository::class)->whereInUpdateIsNotification(\Illuminate\Support\Arr::pluck($appointments,'id'));
+            }
+        }
+    }
+    dd('ok');
 });
 

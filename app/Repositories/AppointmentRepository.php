@@ -55,6 +55,22 @@ class AppointmentRepository extends BaseRepository
            ->toArray();
     }
 
+    public function getUserReadyTimeBySettingTEST($day){
+        return $this->appointment
+//            ->whereNotNull('date_meeting')
+//            ->where('date_meeting','>=',Carbon::now()->addDay($day)->toDateTimeString())
+//            ->where('status','coming')
+//            ->where('is_notification',false)
+            ->select([
+                'id',
+                'name',
+                'date_meeting',
+                'address',
+                'type',
+            ])->get()
+            ->toArray();
+    }
+
     public function whereInUpdateIsNotification(array $ids){
         try {
             return $this->appointment->whereIn('id',$ids)->update([
