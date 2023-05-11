@@ -147,7 +147,7 @@ Route::get('notification-ready-time',function (){
                         'shop_id'=>$user['id'],
                         'link'=>$appointment['id']."_appointment",
                         'type'=>'ready_time',
-                        'info'=>[],
+                        'info'=>$appointment,
                         'title'=>$appointment['name'],
                         'created_at'=>$appointment['time_created_at']
                     ]);
