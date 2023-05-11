@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\SendPusherNotificationLongTimeJob;
 use App\Repositories\Mongo\RelationshipRepository;
 use App\Repositories\UserRepository;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
@@ -51,10 +52,20 @@ class UserLongTimeCommand extends Command
                     if(!empty($people)){
                         $ids=[];
                         foreach ($people as $item){
+                            $item['_id']=(string)new \MongoDB\BSON\ObjectId($item['_id']);
+                            $item['time_created_at']=\Illuminate\Support\Carbon::now()->toDateTimeString();
                             $ids[]=[
-                                '_id'=>(string)new \MongoDB\BSON\ObjectId($item['_id']),
+                                '_id'=>$item['_id'],
                                 'is_notification'=>true
                             ];
+                            app(NotificationService::class)->create([
+                                'shop_id'=>$user['id'],
+                                'link'=>$item['_id']."_people",
+                                'type'=>'long_time',
+                                'info'=>$item,
+                                'title'=>"Have you had a friend for so long?",
+                                'created_at'=> $item['time_created_at']
+                            ]);
                             SendPusherNotificationLongTimeJob::dispatch($user['id'],$item)->onQueue('notification-long-time');
                         }
                         app(RelationshipRepository::class)->setCollection($user['id'])->update($ids);

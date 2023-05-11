@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class SendPusherNotificationReadyTimeMeetJob implements ShouldQueue
 {
@@ -33,6 +34,12 @@ class SendPusherNotificationReadyTimeMeetJob implements ShouldQueue
     public function handle()
     {
 
-        PusherHelper::pusher($this->userId,$this->appointment,'notification_');
+        $data=[
+            'type'=>'ready_time',
+            'info'=>[],
+            'title'=>$this->appointment['name'],
+            'created_at'=>$this->appointment['time_created_at']
+        ];
+        PusherHelper::pusher($this->userId,$data,'notification_');
     }
 }

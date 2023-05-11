@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RelationShipController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\TagsController;
+use App\Http\Controllers\NotificationController;
 
 
 Route::group(['prefix'=>'account'],function (){
@@ -47,6 +48,10 @@ Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
         Route::post('create',[TagsController::class,'store']);
         Route::put('{id}',[TagsController::class,'update']);
         Route::delete('{id}',[TagsController::class,'destroy']);
+    });
+
+    Route::group(['prefix'=>'notification'],function (){
+        Route::get('',[NotificationController::class,'getList']);
     });
 });
 

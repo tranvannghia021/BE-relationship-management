@@ -8,6 +8,7 @@ use Jenssegers\Mongodb\Schema\Blueprint;
 class MongoBaseRepository
 {
     private $prefix = 'relationships_';
+    private $prefixNotification = 'notification_';
 
     public function __construct()
     {
@@ -34,6 +35,12 @@ class MongoBaseRepository
             $table->index('profiles');
             $table->index('notes');
             $table->index('is_notification');
+        });
+        Schema::connection('mongodb')->table($this->prefixNotification . $id, static function (Blueprint $table) {
+            $table->index('type');//{"long_time","ready_time"}
+            $table->index('title');//string
+            $table->index('info');//object
+            $table->index('create_at');//date
         });
 
     }

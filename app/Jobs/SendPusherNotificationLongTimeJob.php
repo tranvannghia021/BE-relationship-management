@@ -34,10 +34,10 @@ class SendPusherNotificationLongTimeJob implements ShouldQueue
     public function handle()
     {
         $data=[
-            '_id'=>(string) new ObjectId($this->people['_id']),
-            'full_name'=>$this->people['full_name'],
-            'avatar'=>$this->people['avatar'],
-            'tag'=>@$this->people['tag']
+            'type'=>'long_time',
+            'info'=>$this->people,
+            'title'=>"Have you had a friend for so long?",
+            'created_at'=> $this->people['time_created_at']
         ];
         PusherHelper::pusher($this->userId,$data,'notification_');
     }
