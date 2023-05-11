@@ -33,6 +33,7 @@ class MongoBaseRepository
             $table->index('date_meeting');
             $table->index('profiles');
             $table->index('notes');
+            $table->index('is_notification');
         });
 
     }

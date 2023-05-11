@@ -1,5 +1,7 @@
 <?php
 
+use App\Repositories\AppointmentRepository;
+use App\Repositories\Mongo\RelationshipRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Carbon;
 use \Illuminate\Support\Facades\Route;
@@ -97,17 +99,20 @@ Route::get('run-add',function (){
 });
 
 Route::get('test',function (){
-    try {
-        $users=app(UserRepository::class)->getAllUserLongTime();
-        $currenDate= \Carbon\Carbon::now()->toDateTimeString();
-        foreach ($users as $user){
-            if($user['user_long_time'] < $currenDate){
-                echo "asdasd";
-            }
-        }
-        dd($users);
-    }catch (\Exception $exception){
-        dd($exception->getMessage());
+
+    $people=app(RelationshipRepository::class)->setCollection(1)->
+    getUserLongTimeBySetting(2);
+    $ids=\Illuminate\Support\Arr::pluck($people,'_id');
+    $temp=[];
+    foreach ($ids as $id){
+
+        $temp[]=[
+            '_id'=>(string)new \MongoDB\BSON\ObjectId($id),
+             'is_notification'=>false
+        ];
     }
+
+    $appointments= app(RelationshipRepository::class)->setCollection(1)->update($temp);
+    dd($appointments);
 });
 

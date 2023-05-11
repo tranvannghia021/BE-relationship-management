@@ -19,7 +19,8 @@ class Appointment extends Model
         'status',
         'name',
         'notes',
-        'date_meeting'
+        'date_meeting',
+        'is_notification'
     ];
     protected $casts=[
         'time'=>'datetime',

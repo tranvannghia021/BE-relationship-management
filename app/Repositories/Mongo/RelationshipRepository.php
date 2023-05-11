@@ -171,8 +171,11 @@ class RelationshipRepository extends MongoBaseRepository{
     }
 
     public function getUserLongTimeBySetting($day){
-        return $this->db->whereNotNull('last_meeting')
-            ->where('last_meeting','<=',Carbon::now()->addDay(-$day)->toDateTimeString())
+        return $this->db
+            ->whereNotNull('last_meeting')
+            ->whereNotNull('is_notification')
+            ->where('last_meeting','>=',Carbon::now()->addDay(-$day)->toDateTimeString())
+            ->where('is_notification',false)
             ->select([
                 '_id',
                 'full_name',
@@ -181,4 +184,6 @@ class RelationshipRepository extends MongoBaseRepository{
             ])
             ->get()->toArray();
     }
+
+
 }

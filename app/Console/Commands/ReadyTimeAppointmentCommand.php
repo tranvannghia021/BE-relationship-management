@@ -51,6 +51,7 @@ class ReadyTimeAppointmentCommand extends Command
                        foreach ($appointments as $appointment){
                             SendPusherNotificationReadyTimeMeetJob::dispatch($user['id'],$appointment)->onQueue('notification-ready-time');
                        }
+                       app(AppointmentRepository::class)->whereInUpdateIsNotification(\Illuminate\Support\Arr::pluck($appointments,'id'));
                    }
                }
            }

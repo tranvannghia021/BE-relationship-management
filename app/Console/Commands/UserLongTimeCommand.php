@@ -7,6 +7,7 @@ use App\Repositories\Mongo\RelationshipRepository;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 
 class UserLongTimeCommand extends Command
 {
@@ -48,9 +49,15 @@ class UserLongTimeCommand extends Command
                     $people=app(RelationshipRepository::class)->setCollection($user['id'])->
                     getUserLongTimeBySetting($users['user_long_time']);
                     if(!empty($people)){
+                        $ids=[];
                         foreach ($people as $item){
+                            $ids[]=[
+                                '_id'=>(string)new \MongoDB\BSON\ObjectId($item['_id']),
+                                'is_notification'=>true
+                            ];
                             SendPusherNotificationLongTimeJob::dispatch($user['id'],$item)->onQueue('notification-long-time');
                         }
+                        app(RelationshipRepository::class)->setCollection($user['id'])->update($ids);
                     }
                 }
             }
