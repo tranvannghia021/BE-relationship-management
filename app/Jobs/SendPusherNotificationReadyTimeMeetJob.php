@@ -36,7 +36,7 @@ class SendPusherNotificationReadyTimeMeetJob implements ShouldQueue
 
         $data=[
             'type'=>'ready_time',
-            'info'=>[],
+            'info'=>$this->appointment,
             'title'=>$this->appointment['name'],
             'created_at'=>$this->appointment['time_created_at']
         ];
