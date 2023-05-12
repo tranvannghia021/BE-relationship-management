@@ -19,7 +19,7 @@ class AuthJwtRefreshTokenMiddeware
      */
     public function handle(Request $request, Closure $next)
     {
-        $token=$request->header('Authorization');
+        $token=$request->input('Authorization');
         if(empty($token)){
             return \response()->json([
                 'status'=>false,

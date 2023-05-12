@@ -1,0 +1,1 @@
+docker exec -it -w /var/www/BE-relationship-management $(docker ps -f "name=workspace" -q) sh php.sh

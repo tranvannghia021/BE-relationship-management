@@ -7,6 +7,7 @@ use App\Jobs\SendMailVerifyRegisterJob;
 use App\Repositories\Mongo\MongoBaseRepository;
 use App\Repositories\UserRepository;
 use App\Traits\Response;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\Concerns\Has;
 use Illuminate\Validation\Validator;
@@ -39,7 +40,7 @@ class UserService{
             if(empty($account)){
                 return $this->ApiResponseError('Errors,Register is failed,Please try again');
             }
-            SendMailVerifyRegisterJob::dispatch($account)->onConnection('redis')->onQueue("send_email");
+            SendMailVerifyRegisterJob::dispatch($account)->onQueue("send_email");
             return $this->ApiResponse([],'Success,Please verify email',201);
         }catch (\Exception $exception){
             return $this->ApiResponseError('Errors');
@@ -104,6 +105,7 @@ class UserService{
         if (empty($account)){
             return $this->ApiResponseError("User not found");
         }
+        $account['birthday']=Carbon::parse($account['birthday'])->toISOString();
         unset($account['password']);
         return $this->ApiResponse($account,"User Information");
     }
@@ -148,7 +150,7 @@ class UserService{
         if(empty($account)){
             return $this->ApiResponseError("User not found");
         }
-        SendMailVerifyForgotPasswordJob::dispatch($account)->onConnection('redis')->onQueue('send_link_forgot_pass');
+        SendMailVerifyForgotPasswordJob::dispatch($account)->onQueue('send_link_forgot_pass');
         return $this->ApiResponse(null,"Send link verify in your email");
 
     }
@@ -159,6 +161,7 @@ class UserService{
             return $this->ApiResponseError("User not found");
         }
         $account->delete();
+        Common::dropCollection($account['id']);
         return $this->ApiResponse(null,"Delete user success");
     }
 
@@ -173,10 +176,37 @@ class UserService{
         }
         if($request->input('type') === 'register'){
 
-            SendMailVerifyRegisterJob::dispatch($account)->onConnection('redis')->onQueue("send_email");
+            SendMailVerifyRegisterJob::dispatch($account)->onQueue("send_email");
         }else{
-            SendMailVerifyForgotPasswordJob::dispatch($account)->onConnection('redis')->onQueue("send_link_forgot_pass");
+            SendMailVerifyForgotPasswordJob::dispatch($account)->onQueue("send_link_forgot_pass");
         }
         return $this->ApiResponse(null,"sended link verify success");
+    }
+
+    public function changePassword($request){
+        $account=$this->userRepo->find($request->input('userInfo.id'));
+        if(empty($account)){
+            return $this->ApiResponseError("User not found");
+        }
+        if(Hash::check($request->input('old_password'),$account['password'])){
+            $account->update([
+                'password'=>Hash::make($request->input('new_password'))
+            ]);
+            return $this->ApiResponse(null,"Update password success");
+        }
+        return $this->ApiResponseError("Password does not match");
+    }
+
+    public function updateUser(array $payload){
+        $id=$payload['userInfo']['id'];
+        unset($payload['userInfo']);
+        if(!empty($payload['avatar'])){
+            $payload['avatar']=config('app.url')."/storage/avatar/".Common::saveImgBase64('avatar',$payload['avatar']);
+        }
+        $this->userRepo->updateBy([
+            'id'=>$id
+        ],$payload);
+
+        return $this->ApiResponse([],"Update user success");
     }
 }

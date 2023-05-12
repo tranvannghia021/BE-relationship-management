@@ -1,12 +1,15 @@
 <?php
+
 namespace App\Repositories\Mongo;
+
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use MongoDB\BSON\ObjectId;
 
-class RelationshipRepository extends MongoBaseRepository{
-    protected $prefixCollection = 'relationships_', $db;
+class NotificationRepository extends MongoBaseRepository
+{
+    protected $prefixCollection = 'notification_', $db;
 
     /**
      * @return mixed
@@ -20,33 +23,7 @@ class RelationshipRepository extends MongoBaseRepository{
 
     public function insert($payload) {
         return$this->db->insert($payload);
-//        $dataBulkWrite = [];
-//
-//        if (!empty($payload)) {
-//            foreach ($payload as $people) {
-//                if (empty($people['user_id'])) {
-//                    continue;
-//                }
-//                $dataBulkWrite[] = [
-//                    'updateOne' => [
-//                        ['user_id' => $people['user_id']],
-//                        [
-//                            '$set' => $people,
-//                        ],
-//                        ['upsert' => true]
-//                    ]
-//
-//                ];
-//            }
-//        }
-//
-//        if (!empty($dataBulkWrite)) {
-//            $this->db->raw(static function ($collection) use ($dataBulkWrite) {
-//                return $collection->bulkWrite(
-//                    $dataBulkWrite
-//                );
-//            });
-//        }
+
     }
 
     public function find($id, $select = []) {
@@ -62,19 +39,15 @@ class RelationshipRepository extends MongoBaseRepository{
             ['_id'])->first();
     }
 
-    public function getByFilter($filter, $paginate, $select = ['*']) {
+    public function getByFilter($filter, $select = ['*']) {
 
         $rawData = $this->db->select($select);
         if(!empty($filter['keyword'])){
-            $rawData->where('full_name','like','%'.trim($filter['keyword']).'%');
+            $rawData->where('title','like','%'.trim($filter['keyword']).'%');
         }
         $rawData->orderBy('_id','DESC');
-        if(!empty($filter['type'])){
-           $data= $rawData->get();
-        }else{
-            $data= $rawData->Paginate($paginate['limit']);
-        }
-        return $data;
+
+        return  $rawData->get();;
     }
 
     public function dropCollection($suffixCollection): void
@@ -84,10 +57,6 @@ class RelationshipRepository extends MongoBaseRepository{
 
     public function finds($ids, $select = ['*']) {
         return $this->db->select($select)->whereIn('_id', $ids)->get()->toArray();
-    }
-
-    public function findsUpdate($ids,$payload) {
-        return $this->db->whereIn('_id', $ids)->update($payload);
     }
 
     public function findsWithReadyToPush($ids, $select = ['*']) {
@@ -102,13 +71,13 @@ class RelationshipRepository extends MongoBaseRepository{
 //                if (empty($product['_id'])) {
 //                    continue;
 //                }
-                $dataBulkWrite[] = [
-                    'deleteOne' => [
-                        [
-                            '_id' => new ObjectId($id)
-                        ]
+            $dataBulkWrite[] = [
+                'deleteOne' => [
+                    [
+                        '_id' => new ObjectId($id)
                     ]
-                ];
+                ]
+            ];
 //            }
         }
 
@@ -172,36 +141,6 @@ class RelationshipRepository extends MongoBaseRepository{
                 );
             });
         }
-    }
-
-    public function getUserLongTimeBySetting($day){
-        return $this->db
-            ->whereNotNull('last_meeting')
-            ->whereNotNull('is_notification')
-            ->where('last_meeting','>=',Carbon::now()->addDay(-$day)->toDateTimeString())
-            ->where('is_notification',false)
-            ->select([
-                '_id',
-                'full_name',
-                'tag',
-                'avatar'
-            ])
-            ->get()->toArray();
-    }
-
-    public function getUserLongTimeBySettingTEST($day){
-        return $this->db
-//            ->whereNotNull('last_meeting')
-//            ->whereNotNull('is_notification')
-//            ->where('last_meeting','>=',Carbon::now()->addDay(-$day)->toDateTimeString())
-//            ->where('is_notification',false)
-            ->select([
-                '_id',
-                'full_name',
-                'tag',
-                'avatar'
-            ])
-            ->get()->toArray();
     }
 
 

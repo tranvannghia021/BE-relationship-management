@@ -15,12 +15,13 @@ class CreateAppointmentTable extends Migration
     {
         Schema::create('appointment', function (Blueprint $table) {
             $table->id();
-            $table->integer('relationship_id');
-            $table->integer('user_id');
-            $table->string('name')->nullable()->index();
+            $table->string('name')->nullable();
+            $table->jsonb('relationship_ids');
+            $table->bigInteger('user_id');
+            $table->string('type')->nullable()->index();
             $table->text('address')->nullable();
-            $table->date('time')->default(date("Y-m-d H:i:s"));
-            $table->jsonb('notes')->nullable();
+            $table->date('date_meeting')->default(date("Y-m-d H:i:s"));
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

@@ -159,5 +159,6 @@ return [
             ]
         ],
 
-    ]
+    ],
+    'debug_key'=>env('DEBUG_TOKEN')
 ];

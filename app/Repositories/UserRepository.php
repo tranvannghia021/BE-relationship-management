@@ -2,6 +2,7 @@
 namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Mockery\Exception;
 
 class UserRepository extends BaseRepository {
@@ -64,5 +65,21 @@ class UserRepository extends BaseRepository {
             $result=$this->update($users['id'],$attributes);
         }
         return $result;
+    }
+
+    public function getAllUserLongTime(){
+       return $this->user->whereNotNull('settings->user_long_time')
+        ->select([
+            'id',
+            'settings->user_long_time as user_long_time'
+        ])->get()->toArray();
+    }
+
+    public function getAllUserReadyTime(){
+        return $this->user->whereNotNull('settings->ready_time_appointment')
+            ->select([
+                'id',
+                'settings->ready_time_appointment as ready_time_appointment'
+            ])->get()->toArray();
     }
 }

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Account\RegisterRequest;
 use App\Http\Requests\Account\ReSendLinkRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Services\UserService;
 use App\Traits\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -56,5 +58,30 @@ class UserController extends Controller
 
     public function reSendLinkVerifyEmail(ReSendLinkRequest $request){
         return $this->userService->reSendLinkVerifyEmail($request);
+    }
+
+    public function changePassword(ChangePasswordRequest $request){
+        return $this->userService->changePassword($request);
+    }
+
+    public function updateUsers(Request $request){
+        $request=$request->only([
+            'name',
+            'avatar',
+            'email',
+            'gender',
+            'birthday',
+            'phone',
+            'address',
+            'status',
+            'userInfo',
+            'settings',
+        ]);
+
+        if(!empty($request['name'])){
+            $request['first_name']=$request['name'];
+            unset($request['name']);
+        }
+        return $this->userService->updateUser($request);
     }
 }

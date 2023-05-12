@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->nullable()->index();
             $table->enum('gender',['male','female','other'])->default('male');
             $table->date('birthday')->nullable();
-            $table->bigInteger('phone')->nullable();
+            $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();

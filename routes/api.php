@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\VerifyController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RelationShipController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\TagsController;
+use App\Http\Controllers\NotificationController;
 
 
 Route::group(['prefix'=>'account'],function (){
@@ -16,7 +20,39 @@ Route::group(['prefix'=>'account'],function (){
 
 Route::group(['prefix'=>'','middleware'=>'auth.jwt'],function (){
     Route::get('account',[UserController::class,'users']);
+    Route::post('account',[UserController::class,'updateUsers']);
+    Route::put('account/change-password',[UserController::class,'changePassword']);
     Route::delete('account',[UserController::class,'deleteUser']);
+
+    Route::group(['prefix'=>'relationship'],function (){
+        Route::get('',[RelationShipController::class,'getList']);
+        Route::get('{id}',[RelationShipController::class,'getDetail']);
+        Route::post('create',[RelationShipController::class,'createPeople']);
+        Route::post('{id}',[RelationShipController::class,'updatePeople']);
+        Route::delete('{id}',[RelationShipController::class,'deletePeople']);
+    });
+
+    Route::group(['prefix'=>'appointment'],function (){
+        Route::get('',[AppointmentController::class,'getList']);
+        Route::get('/{id}',[AppointmentController::class,'getDetail']);
+        Route::patch('/{id}',[AppointmentController::class,'status']);
+        Route::post('/create',[AppointmentController::class,'createAppointment']);
+        Route::post('/{id}',[AppointmentController::class,'update']);
+        Route::delete('/{id}',[AppointmentController::class,'delete']);
+    });
+
+
+    Route::group(['prefix'=>'tags'],function (){
+        Route::get('',[TagsController::class,'index']);
+        Route::get('{id}',[TagsController::class,'show']);
+        Route::post('create',[TagsController::class,'store']);
+        Route::put('{id}',[TagsController::class,'update']);
+        Route::delete('{id}',[TagsController::class,'destroy']);
+    });
+
+    Route::group(['prefix'=>'notification'],function (){
+        Route::get('',[NotificationController::class,'getList']);
+    });
 });
 
 Route::group(['prefix'=>'','middleware'=>'auth.verify'],function (){
