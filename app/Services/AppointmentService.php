@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\OrtherJob;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\Mongo\RelationshipRepository;
 use App\Traits\Response;
@@ -119,21 +120,24 @@ class AppointmentService
 
     public function status(int $id){
         $appointment=$this->appointmentRepository->find($id);
+
         if(empty($appointment)){
             return $this->ApiResponseError("Appointment not found");
         }
 
+        OrtherJob::dispatch($appointment,'updateLastMeeting');
+
         $appointment->update([
             'status'=>'done',
+            'is_notification'=>false,
         ]);
         return $this->ApiResponse([],"Update status appointment success");
     }
 
-    public function updateLastMeeting($ids){
-        foreach ($ids as $key=> $id){
-            $ids[$key]['last_meeting']=Carbon::now()->toDateTimeString();
-        }
-        $this->relationshipRepository->update($ids);
+    public function updateLastMeeting($userId,$ids){
+       return $this->relationshipRepository->setCollection($userId)->findsUpdate($ids,[
+            'last_meeting'=>Carbon::now()->toDateTimeString()
+        ]);
     }
 
 

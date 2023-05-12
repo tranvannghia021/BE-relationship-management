@@ -7,6 +7,7 @@ use App\Jobs\SendMailVerifyRegisterJob;
 use App\Repositories\Mongo\MongoBaseRepository;
 use App\Repositories\UserRepository;
 use App\Traits\Response;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\Concerns\Has;
 use Illuminate\Validation\Validator;
@@ -104,6 +105,7 @@ class UserService{
         if (empty($account)){
             return $this->ApiResponseError("User not found");
         }
+        $account['birthday']=Carbon::parse($account['birthday'])->toISOString();
         unset($account['password']);
         return $this->ApiResponse($account,"User Information");
     }

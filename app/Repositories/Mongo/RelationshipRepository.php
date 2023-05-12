@@ -86,6 +86,10 @@ class RelationshipRepository extends MongoBaseRepository{
         return $this->db->select($select)->whereIn('_id', $ids)->get()->toArray();
     }
 
+    public function findsUpdate($ids,$payload) {
+        return $this->db->whereIn('_id', $ids)->update($payload);
+    }
+
     public function findsWithReadyToPush($ids, $select = ['*']) {
         return $this->db->select($select)->whereIn('_id', $ids)->where('ready_to_push', config('constants.READY_TO_PUSH.PRODUCT_IS_READY'))->get()->toArray();
     }
