@@ -160,3 +160,7 @@ Route::get('notification-ready-time',function (){
     dd('ok');
 });
 
+Route::get('test',function (){
+
+});
+
