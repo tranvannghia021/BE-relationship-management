@@ -26,25 +26,25 @@
         font-size: 55px;
     }
     .alert.alert-success{
-       text-align: center;
+        text-align: center;
         font-size: 30px;
         margin-top: 30px;
     }
 </style>
 <body>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Verify Email Address</div>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 
-                <div class="card-body">
-                    <div class="alert alert-success" role="alert">
-                        Your email address has been successfully verified.
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <div class="row text-center">
+        <div class="col-sm-6 col-sm-offset-3">
+            <br><br> <h2 style="color:#0fad00">Success</h2>
+            <p style="font-size:20px;color:#5C5C5C;">Thank you for verifying your email.</p>
+            <br><br>
         </div>
+
     </div>
 </div>
 </body>
