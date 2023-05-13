@@ -35,15 +35,18 @@ class AppointmentRepository extends BaseRepository
 
     public function getAllAutoUpdateStatus(){
         return$this->appointment->whereNotNull('date_meeting')
-            ->where('date_meeting','<=',Carbon::now()->addDay()->toDateTimeString())
-            ->where('status','coming')->update([
+            ->where('date_meeting','>=',Carbon::now()->addDay()->toDateTimeString())
+            ->where('status','coming')
+            ->update([
                 'status'=>'cancel'
             ]);
     }
 
     public function getUserReadyTimeBySetting($day){
+        $date=Carbon::now()->addDay($day)->toDateTimeString();
+        $currentDate=Carbon::now()->toDateTimeString();
        return $this->appointment->whereNotNull('date_meeting')
-           ->where('date_meeting','>=',Carbon::now()->addDay($day)->toDateTimeString())
+           ->whereBetween('date_meeting',[$currentDate,$date])
            ->where('status','coming')
            ->where('is_notification',false)->select([
                'id',

@@ -54,6 +54,8 @@ class UserLongTimeCommand extends Command
                         foreach ($people as $item){
                             $item['_id']=(string)new \MongoDB\BSON\ObjectId($item['_id']);
                             $item['time_created_at']=\Illuminate\Support\Carbon::now()->toDateTimeString();
+                            $item['tag']=$item['category_name'];
+                            unset($item['category_name']);
                             $ids[]=[
                                 '_id'=>$item['_id'],
                                 'is_notification'=>true

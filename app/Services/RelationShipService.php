@@ -110,6 +110,7 @@ class RelationShipService
             'avatar' => $avatar,
             'phone' => $payload['phone'],
             'first_meeting' => $payload['first_meeting'],
+            'last_meeting' => $payload['first_meeting'],
             'email' => $payload['email'],
             'notes' => $payload['notes'],
             'is_notification'=>false

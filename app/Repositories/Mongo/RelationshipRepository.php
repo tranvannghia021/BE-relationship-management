@@ -178,12 +178,12 @@ class RelationshipRepository extends MongoBaseRepository{
         return $this->db
             ->whereNotNull('last_meeting')
             ->whereNotNull('is_notification')
-            ->where('last_meeting','>=',Carbon::now()->addDay(-$day)->toDateTimeString())
+            ->where('last_meeting','<=',Carbon::now()->addDay(-$day)->toDateTimeString())
             ->where('is_notification',false)
             ->select([
                 '_id',
                 'full_name',
-                'tag',
+                'category_name',
                 'avatar'
             ])
             ->get()->toArray();
