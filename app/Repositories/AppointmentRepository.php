@@ -28,7 +28,7 @@ class AppointmentRepository extends BaseRepository
             $rawData->where('date_meeting','<',$filter['to_date']);
         }
         $rawData->orderBy('id','DESC');
-        return $rawData->orderBy('date','DESC')
+        return $rawData->orderBy('date','ASC')
                 ->Paginate($paginate['limit']);
 
     }
